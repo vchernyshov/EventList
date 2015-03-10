@@ -8,12 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <ua.insomnia.eventlist.widgets.LoadMoreListView
+        <ua.insomnia.eventlist.widgets.LoadMoreAndMultiStateListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-        </ua.insomnia.eventlist.widgets.LoadMoreListView>
+        </ua.insomnia.eventlist.widgets.LoadMoreAndMultiStateListView>
+
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
 </FrameLayout>

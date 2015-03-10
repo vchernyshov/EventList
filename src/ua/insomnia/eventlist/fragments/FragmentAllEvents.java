@@ -6,14 +6,14 @@ import java.util.Map;
 
 import ua.insomnia.eventlist.Event;
 import ua.insomnia.eventlist.EventAdapter;
-import ua.insomnia.eventlist.LoadMoreListView;
-import ua.insomnia.eventlist.LoadMoreListView.OnLoadMoreListener;
 import ua.insomnia.eventlist.MainActivity;
 import ua.insomnia.eventlist.R;
 import ua.insomnia.eventlist.rest.Api;
 import ua.insomnia.eventlist.rest.Respone;
 import ua.insomnia.eventlist.utils.ConnectionUtils;
 import ua.insomnia.eventlist.utils.DateUtils;
+import ua.insomnia.eventlist.widgets.LoadMoreListView;
+import ua.insomnia.eventlist.widgets.LoadMoreListView.OnLoadMoreListener;
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -75,7 +75,7 @@ public class FragmentAllEvents extends Fragment {
 		currentDate = DateUtils.getCurrentDate();
 		adapter = new EventAdapter(getActivity());
 
-		View view = inflater.inflate(R.layout.base_fragment, null);
+		View view = inflater.inflate(R.layout.list_fragment, null);
 		listView = (LoadMoreListView) view.findViewById(R.id.listView);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 

@@ -72,7 +72,7 @@ public class FragmentAllEventsAtDay extends Fragment {
 		 * Bundle extras = getArguments(); if (extras.containsKey("position")) {
 		 * positionFromExtras = extras.getInt("position"); }
 		 */
-		View v = inflater.inflate(R.layout.fr_all_events_at_day, null);
+		View v = inflater.inflate(R.layout.activity_main, null);
 		
 		
 

@@ -4,15 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import ua.insomnia.eventlist.fragments.BaseFragment;
+import ua.insomnia.eventlist.fragments.ListFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-
-
-
-public class FragmentAdapter extends FragmentPagerAdapter {
+public class FragmentAdapter extends FragmentStatePagerAdapter {
 	
 	private String[] dates = new String[201];
 	private String[] datesToShow = new String[201];
@@ -49,7 +46,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		return BaseFragment.newInstance(dates[position]);
+		return ListFragment.newInstance(dates[position]);
 	}
 	 
 
