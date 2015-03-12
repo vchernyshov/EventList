@@ -27,9 +27,7 @@
         </activity>
         <activity
             android:name="ua.insomnia.eventlist.DetailActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName="ua.insomnia.eventlist.MainActivity" >
-        </activity>
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="ua.insomnia.eventlist.data.EventProvider"
