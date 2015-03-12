@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import ua.insomnia.eventlist.rest.EventProviderContract.EventTable;
+import ua.insomnia.eventlist.data.EventContract.EventTable;
+import ua.insomnia.eventlist.model.Event;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;

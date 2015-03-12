@@ -1,24 +1,26 @@
 package ua.insomnia.eventlist.fragments;
 
-import java.util.ArrayList;
-
-import ua.insomnia.eventlist.Event;
-import ua.insomnia.eventlist.EventLargeAdapter;
-import ua.insomnia.eventlist.MainActivity;
+import ua.insomnia.eventlist.DetailActivity;
 import ua.insomnia.eventlist.R;
-import ua.insomnia.eventlist.rest.Api;
-import ua.insomnia.eventlist.rest.EventProviderContract.EventTable;
-import ua.insomnia.eventlist.rest.Respone;
+import ua.insomnia.eventlist.adapters.EventLargeCursorAdapter;
+import ua.insomnia.eventlist.data.EventContract;
+import ua.insomnia.eventlist.data.EventContract.EventTable;
+import ua.insomnia.eventlist.rest.AppResultsReceiver;
+import ua.insomnia.eventlist.rest.AppResultsReceiver.Receiver;
+import ua.insomnia.eventlist.rest.EventService;
 import ua.insomnia.eventlist.utils.ConnectionUtils;
-import ua.insomnia.eventlist.widgets.LoadMoreAndMultiStateListView;
+import ua.insomnia.eventlist.widgets.LoadMoreListView;
 import ua.insomnia.eventlist.widgets.LoadMoreListView.OnLoadMoreListener;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
@@ -27,48 +29,51 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements Receiver, LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final String TAG = "BaseFragment";
-	
+	private static final String TAG = "ListFragment";
 	private static final String ARG_DATE = "date";
-
-	public static Fragment newInstance(String date) {
-		Fragment f = new ListFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_DATE, date);
-		f.setArguments(args);
-		return f;
-	}
-
-	ConnectionUtils con;
-
-	LoadMoreAndMultiStateListView listView;
-	SwipeRefreshLayout layout;
-	EventLargeAdapter adapter;
-	View view;
-
+	private AppResultsReceiver mReceiver;
+	private ConnectionUtils con;
+	private LoadMoreListView listView;
+	private SwipeRefreshLayout layout;
+	private EventLargeCursorAdapter adapter;
 	private String date;
 	int currentPage = 1;
-	Respone res;
-	ArrayList<Event> oldList = new ArrayList<Event>();
+
+	public static Fragment newInstance(String date) {
+		Log.d(TAG, "newInstance with date " + date);
+		Fragment fragment = new ListFragment();
+		Bundle args = new Bundle();
+		args.putString(ARG_DATE, date);
+		fragment.setArguments(args);
+		return fragment;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getArguments();
-		date = extras.getString("date");
+		date = extras.getString(ARG_DATE);
+
+		mReceiver = new AppResultsReceiver(new Handler());
+		mReceiver.setReceiver(this);
+
+		Intent service = new Intent(getActivity(), EventService.class);
+		service.putExtra("receiver", mReceiver);
+		service.putExtra(EventService.DATE_EXTRA, date);
+		getActivity().startService(service);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		con = new ConnectionUtils(getActivity());
-		view = inflater.inflate(R.layout.event_fragment_for_view_pager, null);
+		View view = inflater.inflate(R.layout.event_fragment_for_view_pager,
+				null);
 
-		listView = (LoadMoreAndMultiStateListView) view.findViewById(R.id.listView);
+		listView = (LoadMoreListView) view.findViewById(R.id.listView);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 		layout.setColorScheme(android.R.color.holo_blue_bright,
 				android.R.color.holo_green_light,
@@ -79,103 +84,87 @@ public class ListFragment extends Fragment {
 			@Override
 			public void onRefresh() {
 				layout.setRefreshing(true);
-				// new Load().execute();
-				loadEvents();
+				
+				Intent service = new Intent(getActivity(), EventService.class);
+				service.putExtra("receiver", mReceiver);
+				service.putExtra(EventService.DATE_EXTRA, date);
+				getActivity().startService(service);
 			}
 
 		});
 
-		listView.setEmptyView(view.findViewById(R.id.emptyView));
-
 		listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
-
+		adapter = new EventLargeCursorAdapter(
+				getActivity(), null, 0);
+		listView.setAdapter(adapter);
+		
+		listView.setOnLoadMoreListener(new OnLoadMoreListener() {
+			
+			@Override
+			public void onLoadMore() {
+				Intent service = new Intent(getActivity(), EventService.class);
+				service.putExtra("receiver", mReceiver);
+				service.putExtra(EventService.DATE_EXTRA, date);
+				getActivity().startService(service);
+			}
+		});
+		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-				Event e = adapter.getItem(position);
-				Uri uri = getActivity().getContentResolver().insert(EventTable.CONTENT_URI, e.toContentValues());
-				Log.i(TAG, "uri - " + uri.toString());
-				// Intent i = new Intent(getActivity(),
-				// EventInfoActivity.class);
-				// i.putExtra("id", e.id);
-				// startActivity(i);
-
-				FragmentTransaction tr = getActivity()
-						.getSupportFragmentManager().beginTransaction();
-				tr.replace(R.id.container, EventInfoFragment.newInstance(e.id));
-				tr.addToBackStack(null);
-				tr.commit();
+			public void onItemClick(AdapterView<?> adapterView, View view, int position,
+					long id) {
+				Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+				int index = cursor.getColumnIndex(EventTable._ID);
+				long eventId = cursor.getLong(index);
+				
+				Intent detail = new Intent(getActivity(), DetailActivity.class);
+				detail.putExtra(DetailEventFragment.ARG_ID, eventId);
+				getActivity().startActivity(detail);
+				
 			}
 		});
-
-		adapter = new EventLargeAdapter(getActivity(),
-				R.layout.event_list_large_item, new ArrayList<Event>());
-		listView.setAdapter(adapter);
-		// new Load().execute();
-		loadEvents();
-
+		
 		return view;
 	}
-
-
-	private class Load extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			Api api = new Api();
-			res = api.getEventByDateR(date, currentPage);
-
-			if (res.getNextPage() != null)
-				currentPage = res.getNextPage();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			if (!res.getEvents().isEmpty()) {
-				oldList = res.getEvents();
-				adapter.clear();
-				adapter.addAll(res.getEvents());
-				adapter.notifyDataSetChanged();
-				listView.setAdapter(adapter);
-			} else {
-				listView.setEmptyView(view.findViewById(R.id.noEventView));
-			}
-
-			layout.setRefreshing(false);
-			super.onPostExecute(result);
-		}
-
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		getLoaderManager().initLoader(0, null, this);
 	}
 
-	private class LoadMore extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			Api api = new Api();
-			
-			if (currentPage == 1)
-				return null;
-			else {
-				res = api.getEventByDateR(date, currentPage);
-
-				if (res.getNextPage() != null)
-					currentPage = res.getNextPage();
-			}
-
-			return null;
+	@Override
+	public void onReceiveResult(int resultCode, Bundle data) {
+		if (resultCode == EventService.SERVICE_LOAD_FINISHED) {
+			//Cursor cursor = getActivity().getContentResolver().query(
+			//		EventContract.EventTable.buildEventUriWithDate(date), null,
+			//		null, null, null);
+			//adapter.changeCursor(cursor);
+			layout.setRefreshing(false);
+			listView.onLoadMoreComplete();
 		}
+	}
 
-		@Override
-		protected void onPostExecute(Void result) {
-			if (!res.getEvents().isEmpty() && currentPage!=1) {
-				adapter.addAll(res.getEvents());
-				adapter.notifyDataSetChanged();
-			}
-			super.onPostExecute(result);
-		}
+	@Override
+	public void onPause() {
+		super.onPause();
+		mReceiver.setReceiver(null);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		return new CursorLoader(getActivity(), EventContract.EventTable.buildEventUriWithDate(date), null, null, null, null);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+		adapter.swapCursor(cursor);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		adapter.swapCursor(null);
 
 	}
 

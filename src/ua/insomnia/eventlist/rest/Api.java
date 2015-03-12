@@ -10,7 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import ua.insomnia.eventlist.Event;
+import ua.insomnia.eventlist.model.Event;
 
 public class Api {
 	
@@ -19,22 +19,6 @@ public class Api {
 	private static final String BASE_URL = "http://eventlist.com.ua/api/";
 	private static final String EVENTS = "events";
 	
-	public ArrayList<Event> getEvents(int reguestType, String date, Long id) {
-		ArrayList<Event> list = new ArrayList<Event>();
-		try {
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(createReguestString(reguestType, date, id));
-			HttpResponse httpResponse = httpClient.execute(httpGet);
-			
-			InputStream inputStream = httpResponse.getEntity().getContent();
-
-			if (inputStream != null)
-				list = convertJsonToArrayList(new JSONArray(Utils.convertStreamToString(inputStream)));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
 	
 	public String getEventByPage(int pageSize, int page) {
 		String respone = null;
@@ -90,24 +74,6 @@ public class Api {
 			e.printStackTrace();
 		}
 		return respone;
-	}
-	private String createReguestString(int reguestType, String date, Long id) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(BASE_URL);
-		switch(reguestType) {
-		case EventService.TYPE_ALL:
-			builder.append(EVENTS);
-			break;
-		case EventService.TYPE_BY_DATE:
-			builder.append(EVENTS);
-			builder.append(date+"/");
-			break;
-		case EventService.TYPE_BY_ID:
-			builder.append(EVENTS);
-			builder.append(id.toString()+"/");
-			break;
-		}
-		return builder.toString();
 	}
 	
 	private ArrayList<Event> convertJsonToArrayList(JSONArray json) throws JSONException {

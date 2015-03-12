@@ -7,13 +7,19 @@
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
-        <ua.insomnia.eventlist.widgets.LoadMoreListView
+<!--
+        <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
+        </ListView>
+-->
+        <ua.insomnia.eventlist.widgets.LoadMoreListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
         </ua.insomnia.eventlist.widgets.LoadMoreListView>
-    </android.support.v4.widget.SwipeRefreshLayout>
 
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

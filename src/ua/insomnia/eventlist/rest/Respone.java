@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ua.insomnia.eventlist.Event;
+import ua.insomnia.eventlist.model.Event;
 import android.util.Log;
 
 public class Respone {
@@ -34,12 +34,12 @@ public class Respone {
 		if (json.has("count"))
 			if (json.getString("count") != "null")
 				this.count = new Integer(json.getInt("count"));
-		if (json.has("next"))
+		/*if (json.has("next"))
 			if (json.getString("next") != "null")
 				this.nextPage = new Integer(json.getInt("next"));
 		if (json.has("previous"))
 			if (json.getString("previous") != "null")
-				this.previousPage = new Integer(json.getInt("previous"));
+				this.previousPage = new Integer(json.getInt("previous"));*/
 		if (json.has("results")) {
 			JSONArray events = json.getJSONArray("results");
 			for (int i = 0; i < events.length(); i++)
