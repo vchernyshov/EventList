@@ -87,7 +87,7 @@ public class MainActivity extends StateActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		//saveInt(POSITION, miidlePosition);
+		saveInt(POSITION, miidlePosition);
 		Log.d(TAG, "onDestroy");
 	}
 
