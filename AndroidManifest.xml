@@ -35,6 +35,14 @@
         </provider>
 
         <service android:name="ua.insomnia.eventlist.rest.EventService" />
+
+        <receiver
+            android:name="ua.insomnia.eventlist.rest.NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

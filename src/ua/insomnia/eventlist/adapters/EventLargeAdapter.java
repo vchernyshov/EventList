@@ -3,9 +3,6 @@ package ua.insomnia.eventlist.adapters;
 import java.util.List;
 
 import ua.insomnia.eventlist.R;
-import ua.insomnia.eventlist.R.drawable;
-import ua.insomnia.eventlist.R.id;
-import ua.insomnia.eventlist.R.layout;
 import ua.insomnia.eventlist.model.Event;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.app.Activity;
@@ -16,27 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 public class EventLargeAdapter extends ArrayAdapter<Event> {
 
 	Context context;
-	ImageLoader imageLoader;
-	DisplayImageOptions options;
 
 	public EventLargeAdapter(Context context, int resource, List<Event> list) {
 		super(context, resource, list);
 		this.context = context;
-
-		imageLoader = ImageLoader.getInstance();
-		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.bad_connection)
-				.cacheInMemory(true).cacheOnDisk(true)
-				.build();
-		// .showImageForEmptyUri(fallback)
-		// .showImageOnFail(fallback)
-		// .showImageOnLoading(fallback).build();
 	}
 
 	private class ViewHolder {
@@ -74,7 +59,7 @@ public class EventLargeAdapter extends ArrayAdapter<Event> {
 		holder.likesIm.setVisibility(View.INVISIBLE);
 		holder.likesCount.setVisibility(View.INVISIBLE);
 		holder.title.setText(e.title);
-		imageLoader.displayImage(e.image, holder.logo);
+		Picasso.with(context).load(e.image).into(holder.logo);
 
 		holder.time.setText(e.getTime());
 		return convertView;

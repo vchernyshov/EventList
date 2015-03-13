@@ -1,6 +1,6 @@
 package ua.insomnia.eventlist;
 
-import ua.insomnia.eventlist.fragments.DetailEventFragment;
+import ua.insomnia.eventlist.fragments.DetailFragment;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,14 +17,14 @@ public class DetailActivity extends FragmentActivity {
 			getSupportFragmentManager()
 					.beginTransaction()
 					.add(R.id.detailContainer,
-							DetailEventFragment.newInstance(getExtraId()))
+							DetailFragment.newInstance(getExtraId()))
 					.commit();
 		}
 
 	}
 
 	private long getExtraId() {
-		return getIntent().getLongExtra(DetailEventFragment.ARG_ID, -1);
+		return getIntent().getLongExtra(DetailFragment.ARG_ID, -1);
 	}
 	
 	private void initActionBar() {

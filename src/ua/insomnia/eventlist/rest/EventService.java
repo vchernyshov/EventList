@@ -1,20 +1,16 @@
 package ua.insomnia.eventlist.rest;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.data.EventContract.EventTable;
 import ua.insomnia.eventlist.model.Event;
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
 public class EventService extends IntentService {
@@ -24,8 +20,12 @@ public class EventService extends IntentService {
 	public static final int SERVICE_LOAD_FINISHED = 300;
 	public static final int RESULT_CODE = 1;
 	public static final String REGUEST_TYPE = "ua.insomnia.kpievent.REGUEST_TYPE";
-	public static final String DATE_EXTRA = "ua.insomnia.kpievent.DATE_EXTRA";
 
+	public static final String EXTRA_DATE = "ua.insomnia.kpievent.DATE_EXTRA";
+	public static final String EXTRA_ID = "ua.insomnia.eventlist.ID";
+	public static final String EXTRA_RECEIVER = "ua.insomnia.eventlist.RECEIVER";
+
+	Respone respone;
 	ResultReceiver receiver;
 	Api api = new Api();
 
@@ -35,48 +35,29 @@ public class EventService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		ResultReceiver receiver = intent.getParcelableExtra("receiver");
-		String date = intent.getStringExtra(DATE_EXTRA);
-		Respone respone = api.getEventByDateR(date, 1);
+		ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RECEIVER);
+		String date = intent.getStringExtra(EXTRA_DATE);
+		long id = intent.getLongExtra(EXTRA_ID, -1);
+		if (id == -1) 
+			respone = api.getEventByDateR(date, 1);
+		 else
+			 respone = api.getEventByIdR(id);
+		
 		ArrayList<Event> list = respone.getEvents();
 		putEventsToDataBase2(list);
+		
+		
+		
 		receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
 	}
 
-	private long convertDateStringToLong(String date) throws Exception {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date d = (Date) formatter.parse(date);
-		long mills = d.getTime();
-		return mills;
-	}
-
-	private void putEventsToDataBase(ArrayList<Event> list) {
-		int size = list.size();
-		if (size == 1) {
-			Uri uri = getContentResolver().insert(EventTable.CONTENT_URI,
-					list.get(0).toContentValues());
-		} else {
-			ArrayList<ContentValues> values = new ArrayList<ContentValues>();
-			for (int i = 0; i < size; i++) {
-				Event e = list.get(i);
-				values.add(e.toContentValues());
-				Log.i("EventService", e.getDate2());
-			}
-			ContentValues[] cv = new ContentValues[size];
-			cv = (ContentValues[]) values.toArray();
-			int count = getContentResolver().bulkInsert(
-					EventContract.EventTable.CONTENT_URI, cv);
-			Log.i("EventService", "count = " + count);
-		}
-	}
-
 	private void putEventsToDataBase2(ArrayList<Event> list) {
-		Uri uri;
+
 		for (Event event : list) {
 			if (getEventById(event.id) == null) {
-				uri = getContentResolver().insert(EventTable.CONTENT_URI,
-						event.toContentValues());
-				Log.d("EventService", uri.toString());
+				insertEvent(event);
+			} else {
+				updateEvent(event);
 			}
 		}
 	}
@@ -89,5 +70,18 @@ public class EventService extends IntentService {
 			return new Event(cursor);
 		else
 			return null;
+	}
+
+	private void insertEvent(Event event) {
+		Uri uri = getContentResolver().insert(EventTable.CONTENT_URI,
+				event.toContentValues());
+		Log.d("EventService", "insert with uri:\n"+uri.toString());
+	}
+	
+	private int updateEvent(Event event) {
+		int count = getContentResolver().update(
+				EventContract.EventTable.buildEventUri(event.id),event.toContentValues(), null, null);
+		Log.d("EventService", "update event with id " + event.id);
+		return count;
 	}
 }

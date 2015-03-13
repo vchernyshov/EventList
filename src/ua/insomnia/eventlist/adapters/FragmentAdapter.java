@@ -8,8 +8,10 @@ import ua.insomnia.eventlist.fragments.ListFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class FragmentAdapter extends FragmentStatePagerAdapter {
+public class FragmentAdapter extends FixedFragmentStatePagerAdapter {
 	
 	private String[] dates = new String[201];
 	private String[] datesToShow = new String[201];

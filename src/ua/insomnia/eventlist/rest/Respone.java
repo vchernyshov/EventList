@@ -15,8 +15,8 @@ public class Respone {
 
 	private String responeString;
 	private Integer count;
-	private Integer nextPage;
-	private Integer previousPage;
+	private String nextPage;
+	private String previousPage;
 	private ArrayList<Event> list = new ArrayList<Event>();
 
 	public Respone(String respone) {
@@ -33,13 +33,13 @@ public class Respone {
 		JSONObject json = new JSONObject(responeString);
 		if (json.has("count"))
 			if (json.getString("count") != "null")
-				this.count = new Integer(json.getInt("count"));
-		/*if (json.has("next"))
+				this.count = Integer.valueOf(json.getInt("count"));
+		if (json.has("next"))
 			if (json.getString("next") != "null")
-				this.nextPage = new Integer(json.getInt("next"));
+				this.nextPage = json.getString("next");
 		if (json.has("previous"))
 			if (json.getString("previous") != "null")
-				this.previousPage = new Integer(json.getInt("previous"));*/
+				this.previousPage = json.getString("previous");
 		if (json.has("results")) {
 			JSONArray events = json.getJSONArray("results");
 			for (int i = 0; i < events.length(); i++)
@@ -54,11 +54,11 @@ public class Respone {
 		return this.count;
 	}
 
-	public Integer getNextPage() {
+	public String getNextPage() {
 		return this.nextPage;
 	}
 
-	public Integer getPreviousPage() {
+	public String getPreviousPage() {
 		return this.previousPage;
 	}
 

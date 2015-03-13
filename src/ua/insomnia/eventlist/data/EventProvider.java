@@ -1,7 +1,5 @@
 package ua.insomnia.eventlist.data;
 
-import java.io.CharArrayReader;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -160,14 +158,23 @@ public class EventProvider extends ContentProvider {
 		int updatedCount = 0;
 
 		switch (match) {
-		case EVENTS: {
-			updatedCount = db.update(EventContract.EventTable.TABLE_NAME,
-					values, selection, selectionArgs);
+		case EVENTS:
 			break;
-		}
+		case EVENTS_WITH_ID:
+			long _id = EventContract.EventTable.getIdFromUri(uri);
+			if (TextUtils.isEmpty(selection))
+				selection = EventContract.EventTable._ID + "=" + _id;
+			else
+				selection = selection + "AND" + EventContract.EventTable._ID
+						+ "=" + _id;
+			break;
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
+		
+		updatedCount = db.update(EventContract.EventTable.TABLE_NAME,
+				values, selection, selectionArgs);
+		
 		if (updatedCount != 0)
 			getContext().getContentResolver().notifyChange(uri, null);
 		return updatedCount;

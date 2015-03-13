@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/info_block" />
-
+<!--  
     <include
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         layout="@layout/empty_view" />
-
+-->
 </FrameLayout>

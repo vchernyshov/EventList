@@ -26,4 +26,6 @@ public class AppResultsReceiver extends ResultReceiver {
             mReceiver.onReceiveResult(resultCode, resultData);
         }
     }
+    
+    
 }

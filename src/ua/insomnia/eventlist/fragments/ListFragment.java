@@ -36,7 +36,6 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 	private static final String TAG = "ListFragment";
 	private static final String ARG_DATE = "date";
 	private AppResultsReceiver mReceiver;
-	private ConnectionUtils con;
 	private LoadMoreListView listView;
 	private SwipeRefreshLayout layout;
 	private EventLargeCursorAdapter adapter;
@@ -62,8 +61,8 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 		mReceiver.setReceiver(this);
 
 		Intent service = new Intent(getActivity(), EventService.class);
-		service.putExtra("receiver", mReceiver);
-		service.putExtra(EventService.DATE_EXTRA, date);
+		service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
+		service.putExtra(EventService.EXTRA_DATE, date);
 		getActivity().startService(service);
 	}
 
@@ -86,8 +85,8 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 				layout.setRefreshing(true);
 				
 				Intent service = new Intent(getActivity(), EventService.class);
-				service.putExtra("receiver", mReceiver);
-				service.putExtra(EventService.DATE_EXTRA, date);
+				service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
+				service.putExtra(EventService.EXTRA_DATE, date);
 				getActivity().startService(service);
 			}
 
@@ -103,8 +102,8 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 			@Override
 			public void onLoadMore() {
 				Intent service = new Intent(getActivity(), EventService.class);
-				service.putExtra("receiver", mReceiver);
-				service.putExtra(EventService.DATE_EXTRA, date);
+				service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
+				service.putExtra(EventService.EXTRA_DATE, date);
 				getActivity().startService(service);
 			}
 		});
@@ -119,7 +118,7 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 				long eventId = cursor.getLong(index);
 				
 				Intent detail = new Intent(getActivity(), DetailActivity.class);
-				detail.putExtra(DetailEventFragment.ARG_ID, eventId);
+				detail.putExtra(DetailFragment.ARG_ID, eventId);
 				getActivity().startActivity(detail);
 				
 			}

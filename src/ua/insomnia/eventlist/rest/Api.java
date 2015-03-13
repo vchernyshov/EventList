@@ -10,6 +10,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.util.Log;
+
 import ua.insomnia.eventlist.model.Event;
 
 public class Api {
@@ -48,11 +50,13 @@ public class Api {
 	}
 	
 	public Respone getEventByDateR(String date, int page) {
+		Log.d(TAG, "getting events by date " + date + " at page " + page);
 		String URL = BASE_URL+EVENTS+"/"+date+"/?page="+page;
 		return new Respone(makeReguest(URL));
 	}
 	
 	public Respone getEventByIdR(Long id) {
+		Log.d(TAG, "getting event by id " + id);
 		String URL = BASE_URL+EVENTS+"/"+id+"/";	
 		return new Respone(makeReguest(URL));
 	}

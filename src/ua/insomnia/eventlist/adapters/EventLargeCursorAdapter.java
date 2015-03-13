@@ -11,26 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 public class EventLargeCursorAdapter extends CursorAdapter {
 
 	private LayoutInflater inflater;
-	private ImageLoader imageLoader;
-
-	// private DisplayImageOptions options;
 
 	public EventLargeCursorAdapter(Context context, Cursor c, int flags) {
 		super(context, c, flags);
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		//imageLoader = ImageLoader.getInstance();
-		/*
-		 * options = new DisplayImageOptions.Builder()
-		 * .showImageOnLoading(R.drawable.bad_connection)
-		 * .cacheInMemory(true).cacheOnDisk(true).build();
-		 */
 	}
 
 	private static class ViewHolder {
@@ -61,7 +51,6 @@ public class EventLargeCursorAdapter extends CursorAdapter {
 		holder.likesCount.setVisibility(View.INVISIBLE);
 		holder.title.setText(e.title);
 		Picasso.with(context).load(e.image).into(holder.logo);
-		//imageLoader.displayImage(e.image, holder.logo);
 
 		holder.time.setText(e.getTime());
 	}
