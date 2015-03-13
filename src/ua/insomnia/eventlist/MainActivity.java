@@ -1,18 +1,11 @@
 package ua.insomnia.eventlist;
 
-import java.util.ArrayList;
-
 import ua.insomnia.eventlist.adapters.FragmentAdapter;
-import ua.insomnia.eventlist.data.EventContract;
-import ua.insomnia.eventlist.data.EventContract.EventTable;
-import ua.insomnia.eventlist.model.Event;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -53,7 +46,6 @@ public class MainActivity extends StateActivity {
 			@Override
 			public void onPageSelected(int position) {
 				dateView.setText(adapter.getPageTitle(position));
-				// Log.d(TAG, "onCreate listener: " +currentPosition);
 			}
 
 			@Override
@@ -107,50 +99,5 @@ public class MainActivity extends StateActivity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setIcon(R.drawable.logo);
 		actionBar.setTitle(null);
-	}
-
-	private void generateTestEventList() {
-		ArrayList<Event> testList = new ArrayList<Event>();
-		for (int i = 1; i <= 10; i++) {
-			Event e = new Event(i);
-			e.dateTime = "2014-10-1" + i;
-			e.dateTimeWhenCreated = "2014-10-10 23:23:00";
-			e.description = "this is test event " + i;
-			e.entry = "free";
-			e.fbLink = "fb";
-			e.vkLink = "vk";
-			e.location = "loc";
-			e.site = "site";
-			e.price = "free";
-			e.title = "Test " + i;
-			testList.add(e);
-		}
-
-		putEventsToDataBase(testList);
-	}
-
-	private void putEventsToDataBase(ArrayList<Event> list) {
-		for (Event e : list) {
-			Uri uri = getContentResolver().insert(EventTable.CONTENT_URI,
-					e.toContentValues());
-			Log.i("DB", uri.toString());
-		}
-	}
-
-	private void getEventByDate(String date) {
-
-		Cursor cursor = getContentResolver().query(
-				EventContract.EventTable.buildEventUriWithDate(date), null,
-				null, null, null);
-		Log.i("DB", EventContract.EventTable.buildEventUriWithDate(date)
-				.toString() + "\ncount" + cursor.getCount());
-	}
-
-	private void getEventById(long id) {
-		String[] selection = { "" };
-		Uri uri = EventContract.EventTable.buildEventUri(id);
-		Cursor cursor = getContentResolver().query(uri, null, "", selection,
-				null);
-		Log.i("DB", "count" + cursor.getCount());
 	}
 }

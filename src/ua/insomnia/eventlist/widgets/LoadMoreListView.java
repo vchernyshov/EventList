@@ -1,8 +1,6 @@
 package ua.insomnia.eventlist.widgets;
 
 import ua.insomnia.eventlist.R;
-import ua.insomnia.eventlist.R.id;
-import ua.insomnia.eventlist.R.layout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;

@@ -27,9 +27,8 @@ public class EventService extends IntentService {
 	public static final String EXTRA_ID = "ua.insomnia.eventlist.ID";
 	public static final String EXTRA_RECEIVER = "ua.insomnia.eventlist.RECEIVER";
 
-	Respone respone;
+	Response respone;
 	ResultReceiver receiver;
-	Api api = new Api();
 
 	public EventService() {
 		super("EventService");
@@ -42,9 +41,9 @@ public class EventService extends IntentService {
 		long id = intent.getLongExtra(EXTRA_ID, -1);
 		if (NetworkChecker.isNetworkAvailable(getApplicationContext())) {
 			if (id == -1)
-				respone = api.getEventByDateR(date, 1);
+				respone = Api.getEventByDateR(date, 1);
 			else
-				respone = api.getEventByIdR(id);
+				respone = Api.getEventByIdR(id);
 
 			ArrayList<Event> list = respone.getEvents();
 			putEventsToDataBase2(list);

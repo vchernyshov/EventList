@@ -5,10 +5,9 @@ import ua.insomnia.eventlist.R;
 import ua.insomnia.eventlist.adapters.EventLargeCursorAdapter;
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.data.EventContract.EventTable;
+import ua.insomnia.eventlist.rest.EventService;
 import ua.insomnia.eventlist.rest.ServiceResultsReceiver;
 import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
-import ua.insomnia.eventlist.rest.EventService;
-import ua.insomnia.eventlist.utils.NetworkChecker;
 import ua.insomnia.eventlist.widgets.LoadMoreListView;
 import ua.insomnia.eventlist.widgets.LoadMoreListView.OnLoadMoreListener;
 import android.content.Intent;
@@ -71,7 +70,7 @@ public class ListFragment extends Fragment implements Receiver,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.event_fragment_for_view_pager,
-				null);
+				container, false);
 
 		listView = (LoadMoreListView) view.findViewById(R.id.listView);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);

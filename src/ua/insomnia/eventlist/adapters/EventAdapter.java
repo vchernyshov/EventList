@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import ua.insomnia.eventlist.R;
-import ua.insomnia.eventlist.R.id;
-import ua.insomnia.eventlist.R.layout;
 import ua.insomnia.eventlist.model.Event;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.content.Context;
@@ -16,7 +14,7 @@ import android.widget.BaseAdapter;
 
 public class EventAdapter extends BaseAdapter{
 	
-	private static final String TAG = "EventAdapter";
+	//private static final String TAG = "EventAdapter";
 	
 	private static final int TYPE_ITEM = 0;
 	private static final int TYPE_SEPARATOR = 1;
@@ -83,12 +81,12 @@ public class EventAdapter extends BaseAdapter{
 			holder = new ViewHolder();
 			if (type == TYPE_ITEM) {
 				//Log.d(TAG, "inflate event item at position "+position);
-				convertView = inflater.inflate(R.layout.event_list_item, null);
+				convertView = inflater.inflate(R.layout.event_list_item, parent, false);
 				holder.time = (TextViewFonts) convertView.findViewById(R.id.txtEventTime);
 				holder.title = (TextViewFonts) convertView.findViewById(R.id.txtEventTitle);
 			} else {
 				//Log.d(TAG, "inflate date item");
-				convertView = inflater.inflate(R.layout.event_list_item_sep, null);
+				convertView = inflater.inflate(R.layout.event_list_item_sep, parent, false);
 				holder.txt = (TextViewFonts) convertView.findViewById(R.id.txtDate);
 			}
 			convertView.setTag(holder);

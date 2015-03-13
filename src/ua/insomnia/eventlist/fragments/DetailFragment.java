@@ -3,13 +3,12 @@ package ua.insomnia.eventlist.fragments;
 import ua.insomnia.eventlist.R;
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.model.Event;
-import ua.insomnia.eventlist.rest.ServiceResultsReceiver;
 import ua.insomnia.eventlist.rest.EventService;
+import ua.insomnia.eventlist.rest.ServiceResultsReceiver;
 import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.content.Intent;
 import android.database.Cursor;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -62,7 +60,7 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.detail_fragment, null);
+		view = inflater.inflate(R.layout.detail_fragment, container, false);
 
 		infoBlock = (LinearLayout) view.findViewById(R.id.info_child);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.info);

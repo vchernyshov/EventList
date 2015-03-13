@@ -4,7 +4,6 @@ import ua.insomnia.eventlist.fragments.DetailFragment;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 public class DetailActivity extends FragmentActivity {

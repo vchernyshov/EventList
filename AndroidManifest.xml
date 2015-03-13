@@ -30,6 +30,7 @@
             android:screenOrientation="portrait" />
 
         <provider
+            android:exported="false"
             android:name="ua.insomnia.eventlist.data.EventProvider"
             android:authorities="ua.insomnia.eventlist" >
         </provider>
