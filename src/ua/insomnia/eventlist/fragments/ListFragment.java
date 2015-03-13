@@ -5,10 +5,10 @@ import ua.insomnia.eventlist.R;
 import ua.insomnia.eventlist.adapters.EventLargeCursorAdapter;
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.data.EventContract.EventTable;
-import ua.insomnia.eventlist.rest.AppResultsReceiver;
-import ua.insomnia.eventlist.rest.AppResultsReceiver.Receiver;
+import ua.insomnia.eventlist.rest.ServiceResultsReceiver;
+import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
 import ua.insomnia.eventlist.rest.EventService;
-import ua.insomnia.eventlist.utils.ConnectionUtils;
+import ua.insomnia.eventlist.utils.NetworkChecker;
 import ua.insomnia.eventlist.widgets.LoadMoreListView;
 import ua.insomnia.eventlist.widgets.LoadMoreListView.OnLoadMoreListener;
 import android.content.Intent;
@@ -31,11 +31,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
-public class ListFragment extends Fragment implements Receiver, LoaderManager.LoaderCallbacks<Cursor> {
+public class ListFragment extends Fragment implements Receiver,
+		LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final String TAG = "ListFragment";
 	private static final String ARG_DATE = "date";
-	private AppResultsReceiver mReceiver;
+	private ServiceResultsReceiver mReceiver;
 	private LoadMoreListView listView;
 	private SwipeRefreshLayout layout;
 	private EventLargeCursorAdapter adapter;
@@ -57,7 +58,7 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 		Bundle extras = getArguments();
 		date = extras.getString(ARG_DATE);
 
-		mReceiver = new AppResultsReceiver(new Handler());
+		mReceiver = new ServiceResultsReceiver(new Handler());
 		mReceiver.setReceiver(this);
 
 		Intent service = new Intent(getActivity(), EventService.class);
@@ -83,7 +84,7 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 			@Override
 			public void onRefresh() {
 				layout.setRefreshing(true);
-				
+
 				Intent service = new Intent(getActivity(), EventService.class);
 				service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
 				service.putExtra(EventService.EXTRA_DATE, date);
@@ -93,12 +94,11 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 		});
 
 		listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
-		adapter = new EventLargeCursorAdapter(
-				getActivity(), null, 0);
+		adapter = new EventLargeCursorAdapter(getActivity(), null, 0);
 		listView.setAdapter(adapter);
-		
+
 		listView.setOnLoadMoreListener(new OnLoadMoreListener() {
-			
+
 			@Override
 			public void onLoadMore() {
 				Intent service = new Intent(getActivity(), EventService.class);
@@ -107,26 +107,27 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 				getActivity().startService(service);
 			}
 		});
-		
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int position,
-					long id) {
-				Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				Cursor cursor = (Cursor) adapterView
+						.getItemAtPosition(position);
 				int index = cursor.getColumnIndex(EventTable._ID);
 				long eventId = cursor.getLong(index);
-				
+
 				Intent detail = new Intent(getActivity(), DetailActivity.class);
 				detail.putExtra(DetailFragment.ARG_ID, eventId);
 				getActivity().startActivity(detail);
-				
+
 			}
 		});
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -136,12 +137,12 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 	@Override
 	public void onReceiveResult(int resultCode, Bundle data) {
 		if (resultCode == EventService.SERVICE_LOAD_FINISHED) {
-			//Cursor cursor = getActivity().getContentResolver().query(
-			//		EventContract.EventTable.buildEventUriWithDate(date), null,
-			//		null, null, null);
-			//adapter.changeCursor(cursor);
 			layout.setRefreshing(false);
 			listView.onLoadMoreComplete();
+		}
+		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
+			layout.setRefreshing(false);
+			Toast.makeText(getActivity(), "Bad Internet Connection", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -153,7 +154,9 @@ public class ListFragment extends Fragment implements Receiver, LoaderManager.Lo
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-		return new CursorLoader(getActivity(), EventContract.EventTable.buildEventUriWithDate(date), null, null, null, null);
+		return new CursorLoader(getActivity(),
+				EventContract.EventTable.buildEventUriWithDate(date), null,
+				null, null, null);
 	}
 
 	@Override

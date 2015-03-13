@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.data.EventContract.EventTable;
 import ua.insomnia.eventlist.model.Event;
+import ua.insomnia.eventlist.utils.NetworkChecker;
 import android.app.IntentService;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ public class EventService extends IntentService {
 	public static final int SERVICE_START = 100;
 	public static final int SERVICE_STOP = 200;
 	public static final int SERVICE_LOAD_FINISHED = 300;
+	public static final int SERVICE_LOAD_ERROR = 400;
 	public static final int RESULT_CODE = 1;
 	public static final String REGUEST_TYPE = "ua.insomnia.kpievent.REGUEST_TYPE";
 
@@ -38,16 +40,16 @@ public class EventService extends IntentService {
 		ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RECEIVER);
 		String date = intent.getStringExtra(EXTRA_DATE);
 		long id = intent.getLongExtra(EXTRA_ID, -1);
-		if (id == -1) 
-			respone = api.getEventByDateR(date, 1);
-		 else
-			 respone = api.getEventByIdR(id);
-		
-		ArrayList<Event> list = respone.getEvents();
-		putEventsToDataBase2(list);
-		
-		
-		
+		if (NetworkChecker.isNetworkAvailable(getApplicationContext())) {
+			if (id == -1)
+				respone = api.getEventByDateR(date, 1);
+			else
+				respone = api.getEventByIdR(id);
+
+			ArrayList<Event> list = respone.getEvents();
+			putEventsToDataBase2(list);
+		} else
+			receiver.send(SERVICE_LOAD_ERROR, Bundle.EMPTY);
 		receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
 	}
 
@@ -75,12 +77,13 @@ public class EventService extends IntentService {
 	private void insertEvent(Event event) {
 		Uri uri = getContentResolver().insert(EventTable.CONTENT_URI,
 				event.toContentValues());
-		Log.d("EventService", "insert with uri:\n"+uri.toString());
+		Log.d("EventService", "insert with uri:\n" + uri.toString());
 	}
-	
+
 	private int updateEvent(Event event) {
 		int count = getContentResolver().update(
-				EventContract.EventTable.buildEventUri(event.id),event.toContentValues(), null, null);
+				EventContract.EventTable.buildEventUri(event.id),
+				event.toContentValues(), null, null);
 		Log.d("EventService", "update event with id " + event.id);
 		return count;
 	}

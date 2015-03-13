@@ -3,9 +3,9 @@ package ua.insomnia.eventlist.fragments;
 import ua.insomnia.eventlist.R;
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.model.Event;
-import ua.insomnia.eventlist.rest.AppResultsReceiver;
+import ua.insomnia.eventlist.rest.ServiceResultsReceiver;
 import ua.insomnia.eventlist.rest.EventService;
-import ua.insomnia.eventlist.rest.AppResultsReceiver.Receiver;
+import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +38,7 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	private LinearLayout infoBlock;
 	private View view;
 	private SwipeRefreshLayout layout;
-	private AppResultsReceiver mReceiver;
+	private ServiceResultsReceiver mReceiver;
 
 	public static Fragment newInstance(long id) {
 		Log.d(TAG, "new Instance with id " + id);
@@ -54,7 +55,7 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 		Bundle extras = getArguments();
 		id = extras.getLong(ARG_ID);
 		
-		mReceiver = new AppResultsReceiver(new Handler());
+		mReceiver = new ServiceResultsReceiver(new Handler());
 		mReceiver.setReceiver(this);
 	}
 
@@ -150,6 +151,11 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	public void onReceiveResult(int resultCode, Bundle data) {
 		if (resultCode == EventService.SERVICE_LOAD_FINISHED)
 			layout.setRefreshing(false);
+		
+		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
+			layout.setRefreshing(false);
+			Toast.makeText(getActivity(), "Bad Internet Connection", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }
