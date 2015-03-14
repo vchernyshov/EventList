@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ua.insomnia.eventlist.model.Event;
+import android.net.Uri;
 import android.util.Log;
 
 public class Response {
@@ -54,12 +55,14 @@ public class Response {
 		return this.count;
 	}
 
-	public String getNextPage() {
-		return this.nextPage;
+	public Integer getNextPage() {
+		Uri uri = Uri.parse(nextPage);
+		return Integer.valueOf(uri.getQueryParameter("next"));
 	}
 
-	public String getPreviousPage() {
-		return this.previousPage;
+	public Integer getPreviousPage() {
+		Uri uri = Uri.parse(previousPage);
+		return Integer.valueOf(uri.getQueryParameter("previous"));
 	}
 
 	public ArrayList<Event> getEvents() {

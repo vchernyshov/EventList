@@ -23,6 +23,7 @@ public class EventService extends IntentService {
 	public static final int RESULT_CODE = 1;
 	public static final String REGUEST_TYPE = "ua.insomnia.kpievent.REGUEST_TYPE";
 
+	public static final String EXTRA_PAGE = "ua.insomnia.eventlist.PAGE";
 	public static final String EXTRA_DATE = "ua.insomnia.kpievent.DATE_EXTRA";
 	public static final String EXTRA_ID = "ua.insomnia.eventlist.ID";
 	public static final String EXTRA_RECEIVER = "ua.insomnia.eventlist.RECEIVER";
@@ -39,9 +40,10 @@ public class EventService extends IntentService {
 		ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RECEIVER);
 		String date = intent.getStringExtra(EXTRA_DATE);
 		long id = intent.getLongExtra(EXTRA_ID, -1);
+		int page = intent.getIntExtra(EXTRA_PAGE, 1);
 		if (NetworkChecker.isNetworkAvailable(getApplicationContext())) {
 			if (id == -1)
-				respone = Api.getEventByDateR(date, 1);
+				respone = Api.getEventByDateR(date, page);
 			else
 				respone = Api.getEventByIdR(id);
 

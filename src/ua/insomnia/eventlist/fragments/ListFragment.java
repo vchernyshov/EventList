@@ -40,7 +40,7 @@ public class ListFragment extends Fragment implements Receiver,
 	private SwipeRefreshLayout layout;
 	private EventLargeCursorAdapter adapter;
 	private String date;
-	int currentPage = 1;
+	private int nextPage;
 
 	public static Fragment newInstance(String date) {
 		Log.d(TAG, "newInstance with date " + date);
