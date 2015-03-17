@@ -49,9 +49,13 @@ public class EventService extends IntentService {
 
 			ArrayList<Event> list = respone.getEvents();
 			putEventsToDataBase2(list);
+
+			//Bundle data = new Bundle();
+			//data.putInt(EXTRA_PAGE, respone.getNextPage());
+			receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
+
 		} else
 			receiver.send(SERVICE_LOAD_ERROR, Bundle.EMPTY);
-		receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
 	}
 
 	private void putEventsToDataBase2(ArrayList<Event> list) {

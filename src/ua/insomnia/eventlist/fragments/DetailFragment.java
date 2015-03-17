@@ -19,6 +19,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,7 +29,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-public class DetailFragment extends Fragment implements Receiver, LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailFragment extends Fragment implements Receiver,
+		LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final String TAG = "DetailEventFragmnet";
 	public static final String ARG_ID = "id";
@@ -37,6 +40,7 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	private View view;
 	private SwipeRefreshLayout layout;
 	private ServiceResultsReceiver mReceiver;
+	private String shareString = "empty";
 
 	public static Fragment newInstance(long id) {
 		Log.d(TAG, "new Instance with id " + id);
@@ -52,7 +56,7 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 		super.onCreate(savedInstanceState);
 		Bundle extras = getArguments();
 		id = extras.getLong(ARG_ID);
-		
+
 		mReceiver = new ServiceResultsReceiver(new Handler());
 		mReceiver.setReceiver(this);
 	}
@@ -84,6 +88,28 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	public void onActivityCreated(Bundle savedInstanceState) {
 		getLoaderManager().initLoader(0, null, this);
 		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.detail_fragment, menu);
+		/*MenuItem menuItem = menu.findItem(R.id.menu_item_share);
+		ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat
+				.getActionProvider(menuItem);
+
+		if (shareActionProvider != null) {
+			shareActionProvider.setShareIntent(createShareForecastIntent());
+		} else {
+			Log.d(TAG, "Share Action Provider is null");
+		}*/
+	}
+
+	private Intent createShareForecastIntent() {
+		Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		shareIntent.setType("text/plain");
+		shareIntent.putExtra(Intent.EXTRA_TEXT, shareString);
+		return shareIntent;
 	}
 
 	private void initInfoBlock(Event localEvent) {
@@ -119,6 +145,8 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 				((TextViewFonts) child.getChildAt(1)).setText(info[i]);
 			}
 		}
+		
+		shareString = localEvent.title+"\n"+localEvent.dateTime;
 	}
 
 	@Override
@@ -137,7 +165,7 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
 	}
-	
+
 	private void update() {
 		Intent service = new Intent(getActivity(), EventService.class);
 		service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
@@ -149,10 +177,11 @@ public class DetailFragment extends Fragment implements Receiver, LoaderManager.
 	public void onReceiveResult(int resultCode, Bundle data) {
 		if (resultCode == EventService.SERVICE_LOAD_FINISHED)
 			layout.setRefreshing(false);
-		
+
 		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
 			layout.setRefreshing(false);
-			Toast.makeText(getActivity(), "Bad Internet Connection", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Bad Internet Connection",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 

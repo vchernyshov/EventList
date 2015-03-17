@@ -29,7 +29,7 @@ public class Response {
 		}
 		Log.d(TAG, "Respone = " + respone);
 	}
-	
+
 	private void parseResponeStirng() throws JSONException {
 		JSONObject json = new JSONObject(responeString);
 		if (json.has("count"))
@@ -46,8 +46,9 @@ public class Response {
 			for (int i = 0; i < events.length(); i++)
 				this.list.add(new Event(events.getJSONObject(i)));
 		}
-		
-		if (!json.has("count") && !json.has("next") && !json.has("previous") && !json.has("results"))
+
+		if (!json.has("count") && !json.has("next") && !json.has("previous")
+				&& !json.has("results"))
 			list.add(new Event(json));
 	}
 
@@ -56,13 +57,19 @@ public class Response {
 	}
 
 	public Integer getNextPage() {
-		Uri uri = Uri.parse(nextPage);
-		return Integer.valueOf(uri.getQueryParameter("next"));
+		if (nextPage != null) {
+			Uri uri = Uri.parse(nextPage);
+			return Integer.valueOf(uri.getQueryParameter("next"));
+		} else
+			return null;
 	}
 
 	public Integer getPreviousPage() {
-		Uri uri = Uri.parse(previousPage);
-		return Integer.valueOf(uri.getQueryParameter("previous"));
+		if (previousPage != null) {
+			Uri uri = Uri.parse(previousPage);
+			return Integer.valueOf(uri.getQueryParameter("previous"));
+		} else
+			return null;
 	}
 
 	public ArrayList<Event> getEvents() {

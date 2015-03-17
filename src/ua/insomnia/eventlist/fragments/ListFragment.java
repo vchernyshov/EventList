@@ -40,7 +40,7 @@ public class ListFragment extends Fragment implements Receiver,
 	private SwipeRefreshLayout layout;
 	private EventLargeCursorAdapter adapter;
 	private String date;
-	private int nextPage;
+	private int nextPage = 1;
 
 	public static Fragment newInstance(String date) {
 		Log.d(TAG, "newInstance with date " + date);
@@ -69,8 +69,7 @@ public class ListFragment extends Fragment implements Receiver,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.event_fragment_for_view_pager,
-				container, false);
+		View view = inflater.inflate(R.layout.list_fragment, container, false);
 
 		listView = (LoadMoreListView) view.findViewById(R.id.listView);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
@@ -103,6 +102,7 @@ public class ListFragment extends Fragment implements Receiver,
 				Intent service = new Intent(getActivity(), EventService.class);
 				service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
 				service.putExtra(EventService.EXTRA_DATE, date);
+				service.putExtra(EventService.EXTRA_PAGE, nextPage);
 				getActivity().startService(service);
 			}
 		});
@@ -138,10 +138,14 @@ public class ListFragment extends Fragment implements Receiver,
 		if (resultCode == EventService.SERVICE_LOAD_FINISHED) {
 			layout.setRefreshing(false);
 			listView.onLoadMoreComplete();
+
+			if (data.containsKey(EventService.EXTRA_PAGE))
+				nextPage = data.getInt(EventService.EXTRA_PAGE, 1);
 		}
 		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
 			layout.setRefreshing(false);
-			Toast.makeText(getActivity(), "Bad Internet Connection", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Bad Internet Connection",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
