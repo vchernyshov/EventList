@@ -15,12 +15,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -54,6 +57,7 @@ public class DetailFragment extends Fragment implements Receiver,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle extras = getArguments();
 		id = extras.getLong(ARG_ID);
 
@@ -72,6 +76,7 @@ public class DetailFragment extends Fragment implements Receiver,
 				android.R.color.holo_green_light,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light);
+		
 		layout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -93,7 +98,7 @@ public class DetailFragment extends Fragment implements Receiver,
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.detail_fragment, menu);
-		/*MenuItem menuItem = menu.findItem(R.id.menu_item_share);
+		MenuItem menuItem = menu.findItem(R.id.action_share);
 		ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat
 				.getActionProvider(menuItem);
 
@@ -101,7 +106,7 @@ public class DetailFragment extends Fragment implements Receiver,
 			shareActionProvider.setShareIntent(createShareForecastIntent());
 		} else {
 			Log.d(TAG, "Share Action Provider is null");
-		}*/
+		}
 	}
 
 	private Intent createShareForecastIntent() {
