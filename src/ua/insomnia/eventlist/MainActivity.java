@@ -26,7 +26,7 @@ public class MainActivity extends StateActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initActionBar();
+		//initActionBar();
 		setContentView(R.layout.activity_main);
 
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -95,9 +95,9 @@ public class MainActivity extends StateActivity {
 		return settings.getInt(key, defaultValue);
 	}
 
-	private void initActionBar() {
+	/*private void initActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setIcon(R.drawable.logo);
 		actionBar.setTitle(null);
-	}
+	}*/
 }

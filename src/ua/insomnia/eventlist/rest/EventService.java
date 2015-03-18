@@ -50,8 +50,8 @@ public class EventService extends IntentService {
 			ArrayList<Event> list = respone.getEvents();
 			putEventsToDataBase2(list);
 
-			//Bundle data = new Bundle();
-			//data.putInt(EXTRA_PAGE, respone.getNextPage());
+			// Bundle data = new Bundle();
+			// data.putInt(EXTRA_PAGE, respone.getNextPage());
 			receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
 
 		} else
@@ -73,10 +73,14 @@ public class EventService extends IntentService {
 		Cursor cursor = getContentResolver().query(
 				EventContract.EventTable.buildEventUri(id), null, null, null,
 				null);
-		if (cursor.moveToFirst())
-			return new Event(cursor);
-		else
+		if (cursor.moveToFirst()) {
+			Event event = new Event(cursor);
+			cursor.close();
+			return event;
+		} else {
+			cursor.close();
 			return null;
+		}
 	}
 
 	private void insertEvent(Event event) {

@@ -4,12 +4,8 @@
 Base application theme, dependent on API level. This theme is replaced
 by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar"></style>
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme"></style>
-
-    <style name="MyActionBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-        <item name="android:icon">@drawable/logo</item>
-    </style>
 
 </resources>

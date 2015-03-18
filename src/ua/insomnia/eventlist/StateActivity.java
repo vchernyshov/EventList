@@ -1,10 +1,9 @@
 package ua.insomnia.eventlist;
 
 
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 
-public class StateActivity extends FragmentActivity {
+public class StateActivity extends ActionBarActivity {
 	
 	public final String TAG = getClass().getSimpleName();
 
@@ -21,10 +20,10 @@ public class StateActivity extends FragmentActivity {
 	}
 	
 	public void onSaveState() {
-		Log.d(TAG, "onSaveState");
+		//Log.d(TAG, "onSaveState");
 	}
 	
 	public void onRestoreState() {
-		Log.d(TAG, "onRestoreState");
+		//Log.d(TAG, "onRestoreState");
 	}
 }
