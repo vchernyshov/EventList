@@ -2,13 +2,13 @@ package ua.insomnia.eventlist;
 
 import ua.insomnia.eventlist.adapters.FragmentAdapter;
 import ua.insomnia.textviewfonts.TextViewFonts;
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 public class MainActivity extends StateActivity {
@@ -26,7 +26,7 @@ public class MainActivity extends StateActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//initActionBar();
+		initActionBar();
 		setContentView(R.layout.activity_main);
 
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -95,9 +95,11 @@ public class MainActivity extends StateActivity {
 		return settings.getInt(key, defaultValue);
 	}
 
-	/*private void initActionBar() {
-		ActionBar actionBar = getActionBar();
-		actionBar.setIcon(R.drawable.logo);
-		actionBar.setTitle(null);
-	}*/
+	private void initActionBar() {
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayUseLogoEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setLogo(R.drawable.logo);
+	}
 }

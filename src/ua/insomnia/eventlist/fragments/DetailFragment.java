@@ -9,6 +9,9 @@ import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.ShareActionProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +40,7 @@ public class DetailFragment extends Fragment implements Receiver,
 		LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final String TAG = "DetailEventFragmnet";
+	private static final String SHARE_HASHTAG = "#EventList";
 	public static final String ARG_ID = "id";
 
 	private Long id = null;
@@ -43,7 +48,7 @@ public class DetailFragment extends Fragment implements Receiver,
 	private View view;
 	private SwipeRefreshLayout layout;
 	private ServiceResultsReceiver mReceiver;
-	private String shareString = "empty";
+	private Event event;
 
 	public static Fragment newInstance(long id) {
 		Log.d(TAG, "new Instance with id " + id);
@@ -72,11 +77,8 @@ public class DetailFragment extends Fragment implements Receiver,
 
 		infoBlock = (LinearLayout) view.findViewById(R.id.info_child);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.info);
-		layout.setColorScheme(android.R.color.holo_blue_bright,
-				android.R.color.holo_green_light,
-				android.R.color.holo_orange_light,
-				android.R.color.holo_red_light);
-		
+		layout.setColorSchemeColors(Color.RED);
+
 		layout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -103,7 +105,9 @@ public class DetailFragment extends Fragment implements Receiver,
 				.getActionProvider(menuItem);
 
 		if (shareActionProvider != null) {
+			// shareActionProvider.setShareHistoryFileName(null);
 			shareActionProvider.setShareIntent(createShareForecastIntent());
+
 		} else {
 			Log.d(TAG, "Share Action Provider is null");
 		}
@@ -113,7 +117,7 @@ public class DetailFragment extends Fragment implements Receiver,
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		shareIntent.setType("text/plain");
-		shareIntent.putExtra(Intent.EXTRA_TEXT, shareString);
+		shareIntent.putExtra(Intent.EXTRA_TEXT, buildShareString(event));
 		return shareIntent;
 	}
 
@@ -134,6 +138,7 @@ public class DetailFragment extends Fragment implements Receiver,
 				R.drawable.money_ic, R.drawable.phone_ic };
 		Picasso.with(getActivity()).load(localEvent.image)
 				.into((ImageView) view.findViewById(R.id.imLogo));
+
 		for (int i = 0; i < infoBlock.getChildCount(); i++) {
 			if (i == 0)
 				((TextViewFonts) infoBlock.getChildAt(i)).setText(info[i]);
@@ -142,7 +147,8 @@ public class DetailFragment extends Fragment implements Receiver,
 			else {
 				LinearLayout child = (LinearLayout) infoBlock.getChildAt(i);
 
-				if (info[i].isEmpty())
+				Log.d("Event", info[i]);
+				if (TextUtils.isEmpty(info[i])) 
 					child.setVisibility(View.GONE);
 
 				((ImageView) child.getChildAt(0))
@@ -150,8 +156,25 @@ public class DetailFragment extends Fragment implements Receiver,
 				((TextViewFonts) child.getChildAt(1)).setText(info[i]);
 			}
 		}
-		
-		shareString = localEvent.title+"\n"+localEvent.dateTime;
+	}
+
+	private String buildShareString(Event eventParam) {
+		if (eventParam != null) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(SHARE_HASHTAG + "\n\n");
+			builder.append(eventParam.title + "\n");
+			builder.append(eventParam.getDate() + " " + eventParam.getTime()
+					+ "\n");
+			builder.append(eventParam.location + "\n");
+			if (!eventParam.fbLink.isEmpty())
+				builder.append(eventParam.fbLink + "\n");
+			if (!eventParam.vkLink.isEmpty())
+				builder.append(eventParam.vkLink + "\n");
+			if (!eventParam.site.isEmpty())
+				builder.append(eventParam.site + "\n");
+			return builder.toString();
+		} else 
+			return "empty";
 	}
 
 	@Override
@@ -163,7 +186,7 @@ public class DetailFragment extends Fragment implements Receiver,
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		Event event = new Event(cursor);
+		event = new Event(cursor);
 		initInfoBlock(event);
 	}
 

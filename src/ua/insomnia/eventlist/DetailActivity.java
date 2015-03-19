@@ -2,13 +2,14 @@ package ua.insomnia.eventlist;
 
 import ua.insomnia.eventlist.fragments.DetailFragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 public class DetailActivity extends StateActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		//initActionBar();
 		super.onCreate(savedInstanceState);
+		initActionBar();
 		setContentView(R.layout.activity_detail);
 		if (savedInstanceState == null) {	
 			getSupportFragmentManager()
@@ -31,6 +32,15 @@ public class DetailActivity extends StateActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 	}*/
+	
+	private void initActionBar() {
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayUseLogoEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setLogo(R.drawable.logo);
+	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
