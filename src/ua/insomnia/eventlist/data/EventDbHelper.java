@@ -34,7 +34,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
 		sqlBuilder.append(EventContract.EventTable.COLUMN_PRICE + " TEXT, ");
 		sqlBuilder.append(EventContract.EventTable.COLUMN_VK_LINK + " TEXT, ");
 		sqlBuilder.append(EventContract.EventTable.COLUMN_FB_LINK + " TEXT, ");
-		sqlBuilder.append(EventContract.EventTable.COLUMN_SITE + " TEXT");
+		sqlBuilder.append(EventContract.EventTable.COLUMN_SITE + " TEXT, ");
+		sqlBuilder.append(EventContract.EventTable.COLUMN_TITLE_SEARCH + " TEXT");
 		sqlBuilder.append(");");
 		String sql = sqlBuilder.toString();
 		Log.d(TAG, "Creating DB table with string: '" + sql + "'");

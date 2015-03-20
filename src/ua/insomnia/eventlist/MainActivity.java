@@ -1,23 +1,52 @@
 package ua.insomnia.eventlist;
 
+import ua.insomnia.eventlist.adapters.EventLargeCursorAdapter;
 import ua.insomnia.eventlist.adapters.FragmentAdapter;
+import ua.insomnia.eventlist.data.EventContract;
+import ua.insomnia.eventlist.data.EventContract.EventTable;
+import ua.insomnia.eventlist.fragments.DetailFragment;
 import ua.insomnia.textviewfonts.TextViewFonts;
+import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
-public class MainActivity extends StateActivity {
+public class MainActivity extends StateActivity implements
+		LoaderManager.LoaderCallbacks<Cursor> {
 
 	public final String TAG = getClass().getSimpleName();
 
+	private static final int LOADER_SEARCH_ID = 102;
+	private static final String LOADER_QUERY = "loader_query";
 	private static final String POSITION = "position";
 	private static final int SCREEN_PAGE_LIMIT = 2;
 
+	private EventLargeCursorAdapter listViewAdapter;
+	private LinearLayout layout;
+	private ListView serchListView;
 	private ViewPager viewPager;
 	private FragmentAdapter adapter;
 	private TextViewFonts dateView;
@@ -29,10 +58,33 @@ public class MainActivity extends StateActivity {
 		initActionBar();
 		setContentView(R.layout.activity_main);
 
+		serchListView = (ListView) findViewById(R.id.searchListView);
+		layout = (LinearLayout) findViewById(R.id.viewPagerContainer);
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		dateView = (TextViewFonts) findViewById(R.id.txtTopDateView);
 
+		listViewAdapter = new EventLargeCursorAdapter(this, null, 0);
 		adapter = new FragmentAdapter(getSupportFragmentManager());
+
+		serchListView.setDivider(new ColorDrawable(Color.TRANSPARENT));
+		serchListView.setAdapter(listViewAdapter);
+		serchListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				Cursor cursor = (Cursor) adapterView
+						.getItemAtPosition(position);
+				int index = cursor.getColumnIndex(EventTable._ID);
+				long eventId = cursor.getLong(index);
+
+				Intent detail = new Intent(MainActivity.this,
+						DetailActivity.class);
+				detail.putExtra(DetailFragment.ARG_ID, eventId);
+				startActivity(detail);
+
+			}
+		});
 		viewPager.setAdapter(adapter);
 
 		miidlePosition = adapter.getMiddlePosition();
@@ -83,6 +135,59 @@ public class MainActivity extends StateActivity {
 		Log.d(TAG, "onDestroy");
 	}
 
+	@SuppressLint("NewApi")
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.search)
+				.getActionView();
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getComponentName()));
+		searchView.setOnSearchClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				Log.d(TAG, "onQueryTextSubmit - " + query);
+				if (query.length() > 0)
+					search(query);
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String query) {
+				Log.d(TAG, "onQueryTextChange - " + query);
+				if (query.length() > 0) {
+					layout.setVisibility(View.INVISIBLE);
+					serchListView.setVisibility(View.VISIBLE);
+					search(query);
+				} else {
+					layout.setVisibility(View.VISIBLE);
+					serchListView.setVisibility(View.INVISIBLE);
+				}
+				return true;
+			}
+		});
+
+		return true;
+	}
+
+	private void search(String query) {
+		Bundle args = new Bundle();
+		args.putString(LOADER_QUERY, query);
+		getSupportLoaderManager().restartLoader(LOADER_SEARCH_ID, args, this);
+	}
+
 	private void saveInt(String key, int value) {
 		SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
 		Editor editor = settings.edit();
@@ -101,5 +206,34 @@ public class MainActivity extends StateActivity {
 		actionBar.setDisplayShowHomeEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setLogo(R.drawable.logo);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		switch (id) {
+		case LOADER_SEARCH_ID:
+			String query = args.getString(LOADER_QUERY);
+
+			String selection = EventContract.EventTable.COLUMN_TITLE_SEARCH
+					+ " LIKE ? ";
+			String[] selectionArgs = new String[] { "%" + query.toLowerCase()
+					+ "%" };
+			String orderBy = EventContract.EventTable.COLUMN_DATE + " DESC";
+			return new CursorLoader(this, EventContract.EventTable.CONTENT_URI,
+					null, selection, selectionArgs, orderBy);
+		default:
+			return null;
+		}
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+		listViewAdapter.swapCursor(cursor);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		listViewAdapter.swapCursor(null);
+
 	}
 }

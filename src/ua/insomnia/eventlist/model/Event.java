@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import ua.insomnia.eventlist.data.EventContract.EventTable;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -82,6 +83,7 @@ public class Event {
 		v.put(EventTable.COLUMN_VK_LINK, this.vkLink);
 		v.put(EventTable.COLUMN_FB_LINK, this.fbLink);
 		v.put(EventTable.COLUMN_SITE, this.site);
+		v.put(EventTable.COLUMN_TITLE_SEARCH, this.title.toLowerCase());
 		return v;
 	}
 

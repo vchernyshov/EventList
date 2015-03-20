@@ -73,7 +73,7 @@ public class ListFragment extends Fragment implements Receiver,
 
 		listView = (LoadMoreListView) view.findViewById(R.id.listView);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-		layout.setColorSchemeColors(Color.RED);
+		layout.setColorSchemeResources(R.color.refresh_indicator);
 		layout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override

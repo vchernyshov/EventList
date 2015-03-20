@@ -21,13 +21,26 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+             <meta-data android:name="android.app.default_searchable"
+                   android:value="ua.insomnia.eventlist.SearchResultsActivity" />
+            
+            
         </activity>
         <activity
             android:name="ua.insomnia.eventlist.DetailActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="ua.insomnia.eventlist.SearchResultsActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            
+            <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+        </activity>
 
         <provider
             android:exported="false"

@@ -24,44 +24,40 @@ public class EventLargeCursorAdapter extends CursorAdapter {
 	}
 
 	private static class ViewHolder {
-		ImageView logo;
-		ImageView likesIm;
-		TextViewFonts time;
-		TextViewFonts title;
-		TextViewFonts likesCount;
+		public final ImageView logo;
+		public final ImageView likesIm;
+		public final TextViewFonts time;
+		public final TextViewFonts title;
+		public final TextViewFonts likesCount;
+
+		public ViewHolder(View view) {
+			logo = (ImageView) view.findViewById(R.id.imEventLogo);
+			likesIm = (ImageView) view.findViewById(R.id.imEventLikes);
+			time = (TextViewFonts) view.findViewById(R.id.txtEventTime);
+			title = (TextViewFonts) view.findViewById(R.id.txtEventTitle);
+			likesCount = (TextViewFonts) view.findViewById(R.id.txtLikesCount);
+		}
 	}
 
 	@Override
 	public void bindView(View convertView, Context context, Cursor cursor) {
 		ViewHolder holder = (ViewHolder) convertView.getTag();
-		Event e = new Event(cursor);
-
-		holder.logo = (ImageView) convertView.findViewById(R.id.imEventLogo);
-		holder.likesIm = (ImageView) convertView
-				.findViewById(R.id.imEventLikes);
-		holder.time = (TextViewFonts) convertView
-				.findViewById(R.id.txtEventTime);
-		holder.title = (TextViewFonts) convertView
-				.findViewById(R.id.txtEventTitle);
-		holder.likesCount = (TextViewFonts) convertView
-				.findViewById(R.id.txtLikesCount);
-		convertView.setTag(holder);
+		Event event = new Event(cursor);
 
 		holder.likesIm.setVisibility(View.INVISIBLE);
 		holder.likesCount.setVisibility(View.INVISIBLE);
-		holder.title.setText(e.title);
-		Picasso.with(context).load(e.image).into(holder.logo);
+		holder.title.setText(event.title);
+		Picasso.with(context).load(event.image).into(holder.logo);
 
-		holder.time.setText(e.getTime());
+		holder.time.setText(event.getTime());
 	}
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View view = inflater.inflate(R.layout.event_list_large_item, parent,
 				false);
-		ViewHolder holder = new ViewHolder();
+		ViewHolder holder = new ViewHolder(view);
 		view.setTag(holder);
 		return view;
 	}
-
 }

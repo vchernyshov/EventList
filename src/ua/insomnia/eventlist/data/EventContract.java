@@ -31,6 +31,7 @@ public class EventContract {
 		public static final String COLUMN_FB_LINK = "fb_link";
 		public static final String COLUMN_SITE = "site";
 		public static final String COLUMN_TYPE = "type";
+		public static final String COLUMN_TITLE_SEARCH = "title_search";
 		
 		
 		public static final String CONTENT_TYPE =
@@ -49,6 +50,7 @@ public class EventContract {
         public static Uri buildEventUriWithDate(String date) {
         	return CONTENT_URI.buildUpon().appendPath(date).build();
         }
+        
         
         public static long getIdFromUri(Uri uri) {
         	return Long.parseLong(uri.getLastPathSegment());
