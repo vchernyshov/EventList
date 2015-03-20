@@ -28,7 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -146,21 +146,18 @@ public class MainActivity extends StateActivity implements
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
-		searchView.setOnSearchClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-			}
-		});
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				Log.d(TAG, "onQueryTextSubmit - " + query);
-				if (query.length() > 0)
-					search(query);
+
+				InputMethodManager inputMethod = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+				if (MainActivity.this.getCurrentFocus() != null)
+					inputMethod.hideSoftInputFromWindow(MainActivity.this
+							.getCurrentFocus().getWindowToken(), 0);
+
 				return true;
 			}
 
