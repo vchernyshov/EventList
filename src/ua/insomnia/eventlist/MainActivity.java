@@ -146,6 +146,7 @@ public class MainActivity extends StateActivity implements
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
+		
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override

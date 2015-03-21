@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import ua.insomnia.eventlist.data.EventContract.EventTable;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
 
