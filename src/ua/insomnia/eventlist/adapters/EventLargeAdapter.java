@@ -17,19 +17,27 @@ import com.squareup.picasso.Picasso;
 
 public class EventLargeAdapter extends ArrayAdapter<Event> {
 
-	Context context;
+	private Context context;
 
 	public EventLargeAdapter(Context context, int resource, List<Event> list) {
 		super(context, resource, list);
 		this.context = context;
 	}
 
-	private class ViewHolder {
-		ImageView logo;
-		ImageView likesIm;
-		TextViewFonts time;
-		TextViewFonts title;
-		TextViewFonts likesCount;
+	private static class ViewHolder {
+		public final ImageView logo;
+		public final ImageView likesIm;
+		public final TextViewFonts time;
+		public final TextViewFonts title;
+		public final TextViewFonts likesCount;
+
+		public ViewHolder(View view) {
+			logo = (ImageView) view.findViewById(R.id.imEventLogo);
+			likesIm = (ImageView) view.findViewById(R.id.imEventLikes);
+			time = (TextViewFonts) view.findViewById(R.id.txtEventTime);
+			title = (TextViewFonts) view.findViewById(R.id.txtEventTitle);
+			likesCount = (TextViewFonts) view.findViewById(R.id.txtLikesCount);
+		}
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -39,19 +47,9 @@ public class EventLargeAdapter extends ArrayAdapter<Event> {
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
-			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.event_list_large_item,
-					null);
-			holder.logo = (ImageView) convertView
-					.findViewById(R.id.imEventLogo);
-			holder.likesIm = (ImageView) convertView
-					.findViewById(R.id.imEventLikes);
-			holder.time = (TextViewFonts) convertView
-					.findViewById(R.id.txtEventTime);
-			holder.title = (TextViewFonts) convertView
-					.findViewById(R.id.txtEventTitle);
-			holder.likesCount = (TextViewFonts) convertView
-					.findViewById(R.id.txtLikesCount);
+					parent, false);
+			holder = new ViewHolder(convertView);
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
@@ -60,8 +58,8 @@ public class EventLargeAdapter extends ArrayAdapter<Event> {
 		holder.likesCount.setVisibility(View.INVISIBLE);
 		holder.title.setText(e.title);
 		Picasso.with(context).load(e.image).into(holder.logo);
-
 		holder.time.setText(e.getTime());
+
 		return convertView;
 	}
 }
