@@ -23,10 +23,16 @@ public class EventService extends IntentService {
 	public static final int RESULT_CODE = 1;
 	public static final String REGUEST_TYPE = "ua.insomnia.kpievent.REGUEST_TYPE";
 
-	public static final String EXTRA_PAGE = "ua.insomnia.eventlist.PAGE";
-	public static final String EXTRA_DATE = "ua.insomnia.kpievent.DATE_EXTRA";
-	public static final String EXTRA_ID = "ua.insomnia.eventlist.ID";
-	public static final String EXTRA_RECEIVER = "ua.insomnia.eventlist.RECEIVER";
+	public static final String EXTRA_PAGE = "ua.insomnia.eventlist.rest.PAGE";
+	public static final String EXTRA_DATE = "ua.insomnia.eventlist.rest.DATE";
+	public static final String EXTRA_ID = "ua.insomnia.eventlist.rest.ID";
+	public static final String EXTRA_RECEIVER = "ua.insomnia.eventlist.rest.RECEIVER";
+	public static final String EXTRA_ACTION = "ua.insomnia.eventlist.rest.ACTION";
+	public static final String EXTRA_SERVICE_STATUS = "ua.insomnia.eventlist.rest.SERVICE_STATUS";
+	
+	public static final int ACTION_UPDATE = 0;
+	public static final int ACTION_LOAD = 0;
+	public static final int ACTION_LOAD_MORE = 0;
 
 	Response respone;
 	ResultReceiver receiver;

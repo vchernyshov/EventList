@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="refresh_indicator">#cc3333</color>
+    <color name="refresh_indicator_bg">#cc3333</color>
+    <color name="refresh_indicator">#ffffff</color>
 </resources>

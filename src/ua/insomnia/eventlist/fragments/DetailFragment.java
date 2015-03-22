@@ -77,8 +77,8 @@ public class DetailFragment extends Fragment implements Receiver,
 
 		infoBlock = (LinearLayout) view.findViewById(R.id.info_child);
 		layout = (SwipeRefreshLayout) view.findViewById(R.id.info);
+		layout.setProgressBackgroundColorSchemeResource(R.color.refresh_indicator_bg);
 		layout.setColorSchemeResources(R.color.refresh_indicator);
-
 		layout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
