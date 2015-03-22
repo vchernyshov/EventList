@@ -4,7 +4,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="10"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,31 +21,22 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-             <meta-data android:name="android.app.default_searchable"
-                   android:value="ua.insomnia.eventlist.SearchResultsActivity" />
-            
-            
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="ua.insomnia.eventlist.DetailActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="ua.insomnia.eventlist.SearchResultsActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            
-            <meta-data android:name="android.app.searchable"
-                   android:resource="@xml/searchable"/>
-        </activity>
 
         <provider
-            android:exported="false"
             android:name="ua.insomnia.eventlist.data.EventProvider"
-            android:authorities="ua.insomnia.eventlist" >
+            android:authorities="ua.insomnia.eventlist"
+            android:exported="false" >
         </provider>
 
         <service android:name="ua.insomnia.eventlist.rest.EventService" />
