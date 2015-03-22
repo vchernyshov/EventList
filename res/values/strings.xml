@@ -7,5 +7,8 @@
     <string name="no_internet_connection">Відсутнє з\'єднання</string>
     <string name="swipe_toast">Для перегляду інших днів зробіть свайп вправо або вліво</string>
     <string name="free_event">Безкоштовно</string>
+    
+    <string name="future_events">Майбутні події</string>
+    <string name="past_events">Минулі події</string>
 
 </resources>

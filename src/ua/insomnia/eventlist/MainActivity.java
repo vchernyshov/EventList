@@ -1,10 +1,15 @@
 package ua.insomnia.eventlist;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import ua.insomnia.eventlist.adapters.EventLargeAdapterWithSeparator;
 import ua.insomnia.eventlist.adapters.EventLargeCursorAdapter;
 import ua.insomnia.eventlist.adapters.FragmentAdapter;
 import ua.insomnia.eventlist.data.EventContract;
-import ua.insomnia.eventlist.data.EventContract.EventTable;
 import ua.insomnia.eventlist.fragments.DetailFragment;
+import ua.insomnia.eventlist.model.Event;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -52,6 +57,8 @@ public class MainActivity extends StateActivity implements
 	private TextViewFonts dateView;
 	private int miidlePosition;
 
+	private Integer currentDate;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,24 +70,41 @@ public class MainActivity extends StateActivity implements
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		dateView = (TextViewFonts) findViewById(R.id.txtTopDateView);
 
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date date = new Date();
+		currentDate = Integer.valueOf(dateFormat.format(date));
+
 		listViewAdapter = new EventLargeCursorAdapter(this, null, 0);
 		adapter = new FragmentAdapter(getSupportFragmentManager());
 
 		serchListView.setDivider(new ColorDrawable(Color.TRANSPARENT));
-		serchListView.setAdapter(listViewAdapter);
+		/*
+		 * serchListView.setAdapter(listViewAdapter);
+		 * serchListView.setOnItemClickListener(new OnItemClickListener() {
+		 * 
+		 * @Override public void onItemClick(AdapterView<?> adapterView, View
+		 * view, int position, long id) { Cursor cursor = (Cursor) adapterView
+		 * .getItemAtPosition(position); int index =
+		 * cursor.getColumnIndex(EventTable._ID); long eventId =
+		 * cursor.getLong(index);
+		 * 
+		 * Intent detail = new Intent(MainActivity.this, DetailActivity.class);
+		 * detail.putExtra(DetailFragment.ARG_ID, eventId);
+		 * startActivity(detail);
+		 * 
+		 * } });
+		 */
 		serchListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view,
 					int position, long id) {
-				Cursor cursor = (Cursor) adapterView
-						.getItemAtPosition(position);
-				int index = cursor.getColumnIndex(EventTable._ID);
-				long eventId = cursor.getLong(index);
+
+				Event event = (Event) adapterView.getItemAtPosition(position);
 
 				Intent detail = new Intent(MainActivity.this,
 						DetailActivity.class);
-				detail.putExtra(DetailFragment.ARG_ID, eventId);
+				detail.putExtra(DetailFragment.ARG_ID, event.id);
 				startActivity(detail);
 
 			}
@@ -146,7 +170,7 @@ public class MainActivity extends StateActivity implements
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
-		
+
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
@@ -226,12 +250,36 @@ public class MainActivity extends StateActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		listViewAdapter.swapCursor(cursor);
+		// listViewAdapter.swapCursor(cursor);
+		EventLargeAdapterWithSeparator listViewAdapterS = new EventLargeAdapterWithSeparator(
+				this);
+		boolean sep1 = false;
+		boolean sep2 = false;
+		
+		String futureEvents = getResources().getString(R.string.future_events);
+		String pastEvents = getResources().getString(R.string.past_events);
+		
+		while (cursor.moveToNext()) {
+			Event event = new Event(cursor);
+			Integer date = Integer.valueOf(event.getDate2());
+			if (date >= currentDate) {
+				if (!sep1)
+					listViewAdapterS.addSeparatorItem(futureEvents);
+				sep1 = true;
+			} else {
+				if (!sep2)
+					listViewAdapterS.addSeparatorItem(pastEvents);
+				sep2 = true;
+			}
+			listViewAdapterS.addItem(event);
+		}
+
+		serchListView.setAdapter(listViewAdapterS);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-		listViewAdapter.swapCursor(null);
+		// listViewAdapter.swapCursor(null);
 
 	}
 }

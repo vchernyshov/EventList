@@ -114,7 +114,7 @@ public class EventLargeAdapterWithSeparator extends BaseAdapter {
 				convertView = mInflater.inflate(R.layout.event_list_item_sep,
 						parent, false);
 				holderS = new ViewHolderS(convertView);
-				convertView.setTag(holder);
+				convertView.setTag(holderS);
 			} else
 				holderS = (ViewHolderS) convertView.getTag();
 
