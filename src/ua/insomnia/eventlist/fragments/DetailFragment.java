@@ -148,7 +148,7 @@ public class DetailFragment extends Fragment implements Receiver,
 				LinearLayout child = (LinearLayout) infoBlock.getChildAt(i);
 
 				Log.d("Event", info[i]);
-				if (TextUtils.isEmpty(info[i])) 
+				if (TextUtils.isEmpty(info[i]))
 					child.setVisibility(View.GONE);
 
 				((ImageView) child.getChildAt(0))
@@ -173,7 +173,7 @@ public class DetailFragment extends Fragment implements Receiver,
 			if (!eventParam.site.isEmpty())
 				builder.append(eventParam.site + "\n");
 			return builder.toString();
-		} else 
+		} else
 			return "empty";
 	}
 
@@ -186,8 +186,11 @@ public class DetailFragment extends Fragment implements Receiver,
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
-		event = new Event(cursor);
-		initInfoBlock(event);
+		if (cursor != null && cursor.moveToFirst()) {
+			event = new Event(cursor);
+			initInfoBlock(event);
+		} else
+			Log.d(TAG, "cursor is null");
 	}
 
 	@Override
