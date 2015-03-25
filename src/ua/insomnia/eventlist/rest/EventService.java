@@ -39,6 +39,7 @@ public class EventService extends IntentService {
 
 	public EventService() {
 		super("EventService");
+		Log.d("EventService", "hashCode = " + this.hashCode());
 	}
 
 	@Override

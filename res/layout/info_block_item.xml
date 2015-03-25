@@ -12,8 +12,7 @@
 
     <ua.insomnia.textviewfonts.TextViewFonts
         android:id="@+id/textViewFonts1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/BlackTextColor"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="8dp"
         android:text="TextViewFonts"

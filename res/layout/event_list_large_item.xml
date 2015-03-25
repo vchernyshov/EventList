@@ -36,8 +36,7 @@
 
             <ua.insomnia.textviewfonts.TextViewFonts
                 android:id="@+id/txtEventTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BlackTextColor"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:text="17:00" />
@@ -53,16 +52,14 @@
 
             <ua.insomnia.textviewfonts.TextViewFonts
                 android:id="@+id/txtEventTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BlackTextColor"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/separator"
                 android:text="Mister FEL" />
 
             <ua.insomnia.textviewfonts.TextViewFonts
                 android:id="@+id/txtLikesCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BlackTextColor"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"

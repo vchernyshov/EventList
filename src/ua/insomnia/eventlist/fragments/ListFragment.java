@@ -79,6 +79,7 @@ public class ListFragment extends Fragment implements Receiver,
 
 			@Override
 			public void onRefresh() {
+
 				layout.setRefreshing(true);
 
 				Intent service = new Intent(getActivity(), EventService.class);
@@ -142,7 +143,8 @@ public class ListFragment extends Fragment implements Receiver,
 		}
 		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
 			layout.setRefreshing(false);
-			Toast.makeText(getActivity(), "Bad Internet Connection",
+			Toast.makeText(getActivity(),
+					getString(R.string.bad_internet_connection),
 					Toast.LENGTH_SHORT).show();
 		}
 	}

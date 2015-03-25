@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ua.insomnia.eventlist.adapters.EventLargeAdapterWithSeparator;
-import ua.insomnia.eventlist.adapters.EventLargeCursorAdapter;
 import ua.insomnia.eventlist.adapters.FragmentAdapter;
 import ua.insomnia.eventlist.data.EventContract;
 import ua.insomnia.eventlist.fragments.DetailFragment;
@@ -49,15 +48,13 @@ public class MainActivity extends StateActivity implements
 	private static final String POSITION = "position";
 	private static final int SCREEN_PAGE_LIMIT = 2;
 
-	private EventLargeCursorAdapter listViewAdapter;
+	//private EventLargeCursorAdapter listViewAdapter;
 	private LinearLayout layout;
 	private ListView serchListView;
 	private ViewPager viewPager;
 	private FragmentAdapter adapter;
 	private TextViewFonts dateView;
 	private int miidlePosition;
-
-	private Integer currentDate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,11 +67,7 @@ public class MainActivity extends StateActivity implements
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		dateView = (TextViewFonts) findViewById(R.id.txtTopDateView);
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		Date date = new Date();
-		currentDate = Integer.valueOf(dateFormat.format(date));
-
-		listViewAdapter = new EventLargeCursorAdapter(this, null, 0);
+		//listViewAdapter = new EventLargeCursorAdapter(this, null, 0);
 		adapter = new FragmentAdapter(getSupportFragmentManager());
 
 		serchListView.setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -230,6 +223,7 @@ public class MainActivity extends StateActivity implements
 		actionBar.setLogo(R.drawable.logo);
 	}
 
+	@SuppressLint("DefaultLocale")
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		switch (id) {
@@ -256,6 +250,8 @@ public class MainActivity extends StateActivity implements
 		boolean sep1 = false;
 		boolean sep2 = false;
 		
+		Integer currentDate = getCurrentDate();
+		
 		String futureEvents = getResources().getString(R.string.future_events);
 		String pastEvents = getResources().getString(R.string.past_events);
 		
@@ -281,5 +277,12 @@ public class MainActivity extends StateActivity implements
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		// listViewAdapter.swapCursor(null);
 
+	}
+	
+	@SuppressLint("SimpleDateFormat")
+	private Integer getCurrentDate(){
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date date = new Date();
+		return Integer.valueOf(dateFormat.format(date));
 	}
 }

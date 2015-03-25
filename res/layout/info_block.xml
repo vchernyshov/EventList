@@ -36,8 +36,7 @@
 
                 <ua.insomnia.textviewfonts.TextViewFonts
                     android:id="@+id/textViewFonts1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/BlackTextColor"
                     android:layout_marginBottom="16dp"
                     android:layout_marginTop="16dp"
                     android:text="TextViewFonts"
@@ -53,8 +52,7 @@
 
                 <ua.insomnia.textviewfonts.TextViewFonts
                     android:id="@+id/textViewFonts2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/BlackTextColor"
                     android:layout_marginBottom="16dp"
                     app:custom_font = "MyriadPro-Regular.ttf"
                     android:text="TextViewFonts" />

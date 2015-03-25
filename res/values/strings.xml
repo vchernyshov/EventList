@@ -4,7 +4,7 @@
     <string name="image">img</string>
     
     <string name="no_events_for_today">На сьогодні немає запланованих подій</string>
-    <string name="no_internet_connection">Відсутнє з\'єднання</string>
+    <string name="bad_internet_connection">Перевірте з\'єднання з мережею!</string>
     <string name="swipe_toast">Для перегляду інших днів зробіть свайп вправо або вліво</string>
     <string name="free_event">Безкоштовно</string>
     

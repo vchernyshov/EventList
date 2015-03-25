@@ -9,9 +9,6 @@ import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
 import ua.insomnia.textviewfonts.TextViewFonts;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -113,6 +110,7 @@ public class DetailFragment extends Fragment implements Receiver,
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private Intent createShareForecastIntent() {
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -211,7 +209,7 @@ public class DetailFragment extends Fragment implements Receiver,
 
 		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
 			layout.setRefreshing(false);
-			Toast.makeText(getActivity(), "Bad Internet Connection",
+			Toast.makeText(getActivity(), getString(R.string.bad_internet_connection),
 					Toast.LENGTH_SHORT).show();
 		}
 	}

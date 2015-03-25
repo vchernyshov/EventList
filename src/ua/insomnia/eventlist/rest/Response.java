@@ -27,10 +27,13 @@ public class Response {
 		} catch (JSONException e) {
 			Log.e(TAG, "Cant parse respone string.\n" + e.toString());
 		}
+		catch(NullPointerException e1) {
+			Log.e(TAG, "Response string is null.\n" + e1.toString());
+		}
 		Log.d(TAG, "Respone = " + respone);
 	}
 
-	private void parseResponeStirng() throws JSONException {
+	private void parseResponeStirng() throws JSONException, NullPointerException { 
 		JSONObject json = new JSONObject(responeString);
 		if (json.has("count"))
 			if (json.getString("count") != "null")

@@ -4,10 +4,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ua.insomnia.eventlist.data.EventContract.EventTable;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.format.Time;
-import android.util.Log;
 
 public class Event {
 
@@ -38,11 +38,7 @@ public class Event {
 		image = json.getString("image");
 	}
 
-	public Event(int id) {
-		this.id = id;
-		title = "Event Title " + id;
-		dateTime = "2014-11-0" + id;
-	}
+	public Event() {}
 
 	public Event(Cursor cursor) {
 		this.id = cursor.getLong(cursor.getColumnIndex(EventTable._ID));
@@ -68,6 +64,7 @@ public class Event {
 				.getColumnIndex(EventTable.COLUMN_SITE));
 	}
 
+	@SuppressLint("DefaultLocale")
 	public ContentValues toContentValues() {
 		ContentValues v = new ContentValues();
 		v.put(EventTable._ID, this.id);
@@ -90,6 +87,7 @@ public class Event {
 		Time t = new Time(Time.getCurrentTimezone());
 		t.format("yyyy-MM-dd");
 		t.parse3339(dateTime);
+
 		int year = t.year;
 		int month = t.month + 1;
 		int day = t.monthDay;
@@ -102,28 +100,26 @@ public class Event {
 		t.format("yyyy-MM-dd");
 		t.parse3339(dateTime);
 		int year = t.year;
-		int month = t.month+1;
+		int month = t.month + 1;
 		int day = t.monthDay;
-		
+
 		String strDay = "";
 		String strMonth = "";
-		
+
 		if (day < 10)
-			strDay = "0"+day;
+			strDay = "0" + day;
 		else
-			strDay = ""+day;
+			strDay = "" + day;
 		if (month < 10)
-			strMonth = "0"+month;
+			strMonth = "0" + month;
 		else
-			strMonth = ""+month;
+			strMonth = "" + month;
 
 		return year + "" + strMonth + "" + strDay;
 	}
 
 	public String getTime() {
 		Time t = new Time(Time.getCurrentTimezone());
-		Log.i("TimeZone", t.timezone);
-
 		t.format("HH:mm:ss.SSSZ");
 		t.parse3339(dateTime);
 		int hour = t.hour;
