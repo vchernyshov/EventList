@@ -101,7 +101,7 @@ public class ListFragment extends Fragment implements Receiver,
 				Intent service = new Intent(getActivity(), EventService.class);
 				service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
 				service.putExtra(EventService.EXTRA_DATE, date);
-				service.putExtra(EventService.EXTRA_PAGE, nextPage);
+				//service.putExtra(EventService.EXTRA_PAGE, nextPage);
 				getActivity().startService(service);
 			}
 		});
@@ -130,10 +130,14 @@ public class ListFragment extends Fragment implements Receiver,
 	public void onResume() {
 		super.onResume();
 		getLoaderManager().initLoader(0, null, this);
+		mReceiver.setReceiver(this);
 	}
 
 	@Override
 	public void onReceiveResult(int resultCode, Bundle data) {
+		
+		Log.d(TAG, "onReceiveResult. code = " + resultCode);
+		
 		if (resultCode == EventService.SERVICE_LOAD_FINISHED) {
 			layout.setRefreshing(false);
 			listView.onLoadMoreComplete();
@@ -152,7 +156,7 @@ public class ListFragment extends Fragment implements Receiver,
 	@Override
 	public void onPause() {
 		super.onPause();
-		mReceiver.setReceiver(null);
+		 mReceiver.setReceiver(null);
 	}
 
 	@Override

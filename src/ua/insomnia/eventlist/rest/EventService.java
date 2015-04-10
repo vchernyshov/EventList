@@ -15,6 +15,8 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 public class EventService extends IntentService {
+	public static final String TAG = "EventService";
+	
 	public static final String SERVICE_CALLBACK = "ua.insomnia.kpievent.SERVICE_CALLBACK";
 	public static final int SERVICE_START = 100;
 	public static final int SERVICE_STOP = 200;
@@ -34,12 +36,13 @@ public class EventService extends IntentService {
 	public static final int ACTION_LOAD = 0;
 	public static final int ACTION_LOAD_MORE = 0;
 
+	private static final int DEFAULT_PAGE_SIZE = 10;
 	Response respone;
 	ResultReceiver receiver;
 
 	public EventService() {
 		super("EventService");
-		Log.d("EventService", "hashCode = " + this.hashCode());
+		Log.d(TAG, "hashCode = " + this.hashCode());
 	}
 
 	@Override
@@ -60,9 +63,12 @@ public class EventService extends IntentService {
 			// Bundle data = new Bundle();
 			// data.putInt(EXTRA_PAGE, respone.getNextPage());
 			receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
+			Log.d(TAG, "load finished hashCode = " + this.hashCode());
 
-		} else
+		} else {
 			receiver.send(SERVICE_LOAD_ERROR, Bundle.EMPTY);
+			Log.d(TAG, "load error hashCode = " + this.hashCode());
+		}
 	}
 
 	private void putEventsToDataBase2(ArrayList<Event> list) {
