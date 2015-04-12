@@ -62,5 +62,13 @@ public class FragmentAdapter extends FixedFragmentStatePagerAdapter {
 	public int getMiddlePosition() {
 		return 100;
 	}
+	
+	public int getPositionByDate(String date) {
+		for (int i = 0; i< datesToShow.length; i++) {
+			if (date.equals(datesToShow[i]))
+				return i;
+		}
+		return -1;
+	}
 
 }
