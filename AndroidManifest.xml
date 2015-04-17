@@ -33,6 +33,9 @@
         <activity
             android:name="ua.insomnia.eventlist.DetailActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="ua.insomnia.eventlist.CalendarActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="ua.insomnia.eventlist.data.EventProvider"

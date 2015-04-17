@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,6 +48,7 @@ public class MainActivity extends StateActivity implements
 	private static final String LOADER_QUERY = "loader_query";
 	private static final String POSITION = "position";
 	private static final int SCREEN_PAGE_LIMIT = 2;
+	public static final int REQUEST_CODE = 77; 
 
 	//private EventLargeCursorAdapter listViewAdapter;
 	private LinearLayout layout;
@@ -124,6 +126,16 @@ public class MainActivity extends StateActivity implements
 
 			@Override
 			public void onPageScrollStateChanged(int state) {
+			}
+		});
+		
+		dateView.setClickable(true);
+		dateView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+				startActivityForResult(intent, REQUEST_CODE);
 			}
 		});
 
@@ -284,5 +296,19 @@ public class MainActivity extends StateActivity implements
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		Date date = new Date();
 		return Integer.valueOf(dateFormat.format(date));
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				if (data != null){
+					String date = data.getStringExtra(CalendarActivity.ARG_DATE);
+					int newPosition = adapter.getPositionByDate(date);
+					saveInt(POSITION, newPosition);
+					Log.d(TAG, "onActivityResult. date = " + date);
+				}
+			}
+		}
 	}
 }
