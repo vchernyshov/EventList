@@ -8,9 +8,8 @@ import java.util.Locale;
 import ua.insomnia.eventlist.fragments.CalendarFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 
-public class CalendarAdapter extends FragmentPagerAdapter {
+public class CalendarAdapter extends FixedFragmentStatePagerAdapter {
 
 	private ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
 	private ArrayList<String> titlesList = new ArrayList<String>();

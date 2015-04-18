@@ -2,6 +2,7 @@ package ua.insomnia.eventlist;
 
 
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 public class StateActivity extends ActionBarActivity {
 	
@@ -20,10 +21,10 @@ public class StateActivity extends ActionBarActivity {
 	}
 	
 	public void onSaveState() {
-		//Log.d(TAG, "onSaveState");
+		Log.d(TAG, "onSaveState");
 	}
 	
 	public void onRestoreState() {
-		//Log.d(TAG, "onRestoreState");
+		Log.d(TAG, "onRestoreState");
 	}
 }

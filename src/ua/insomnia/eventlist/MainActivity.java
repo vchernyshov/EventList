@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -41,8 +42,6 @@ import android.widget.ListView;
 
 public class MainActivity extends StateActivity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
-
-	public final String TAG = getClass().getSimpleName();
 
 	private static final int LOADER_SEARCH_ID = 102;
 	private static final String LOADER_QUERY = "loader_query";
@@ -152,9 +151,18 @@ public class MainActivity extends StateActivity implements
 	public void onRestoreState() {
 		super.onRestoreState();
 
-		int position = restoreInt(POSITION, miidlePosition);
-		if (viewPager != null)
-			viewPager.setCurrentItem(position);
+		final int position = restoreInt(POSITION, miidlePosition);
+		new Handler().post(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (viewPager != null)
+					viewPager.setCurrentItem(position, true);
+
+			}
+		});
+		//if (viewPager != null)
+		//	viewPager.setCurrentItem(position, true);
 	}
 
 	@Override

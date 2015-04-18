@@ -1,10 +1,8 @@
 package ua.insomnia.eventlist;
 
 import ua.insomnia.eventlist.adapters.CalendarAdapter;
-import ua.insomnia.eventlist.fragments.CalendarFragment.OnDateSelectedListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBar;
@@ -14,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class CalendarActivity extends StateActivity implements OnDateSelectedListener{
+public class CalendarActivity extends StateActivity implements  OnClickListener{
 	
 	public static final String ARG_DATE = "date";
 
@@ -23,6 +21,7 @@ public class CalendarActivity extends StateActivity implements OnDateSelectedLis
 	private TextView monthTitle;
 	private ViewPager viewPager;
 	private CalendarAdapter adapter;
+	//private CalendarAdapterV2 adapter;
 	private int middlePosition;
 
 	@Override
@@ -37,6 +36,7 @@ public class CalendarActivity extends StateActivity implements OnDateSelectedLis
 		monthTitle = (TextView) findViewById(R.id.txtMonthTitle);
 
 		adapter = new CalendarAdapter(getSupportFragmentManager());
+		//adapter = new CalendarAdapterV2(this);
 		viewPager.setAdapter(adapter);
 
 		middlePosition = adapter.getMiddlePosition();
@@ -65,7 +65,7 @@ public class CalendarActivity extends StateActivity implements OnDateSelectedLis
 
 			@Override
 			public void onClick(View v) {
-				viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+				viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true);
 			}
 		});
 
@@ -73,7 +73,7 @@ public class CalendarActivity extends StateActivity implements OnDateSelectedLis
 
 			@Override
 			public void onClick(View v) {
-				viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+				viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
 			}
 		});
 	}
@@ -87,19 +87,11 @@ public class CalendarActivity extends StateActivity implements OnDateSelectedLis
 	}
 
 	@Override
-	public void onDateSelected(String date) {
-		Log.d(TAG, "onDateSelected. date = " + date);
+	public void onClick(View v) {
+		Log.d(TAG, "onDateSelected. date = " + (String)v.getTag());
 		Intent result = new Intent();
-		result.putExtra(ARG_DATE, date);
+		result.putExtra(ARG_DATE, (String)v.getTag());
 		setResult(RESULT_OK, result);
-		
-		new Handler().postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				finish();
-			}
-		}, 500);
-		
+		finish();
 	}
 }
