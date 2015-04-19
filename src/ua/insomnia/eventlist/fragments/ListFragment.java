@@ -57,6 +57,8 @@ public class ListFragment extends Fragment implements Receiver,
 		Bundle extras = getArguments();
 		date = extras.getString(ARG_DATE);
 
+		Log.d(TAG, "onCreate with date " + date);
+		
 		mReceiver = new ServiceResultsReceiver(new Handler());
 		mReceiver.setReceiver(this);
 
@@ -123,6 +125,7 @@ public class ListFragment extends Fragment implements Receiver,
 			}
 		});
 
+		Log.d(TAG, "onCreateView");
 		return view;
 	}
 

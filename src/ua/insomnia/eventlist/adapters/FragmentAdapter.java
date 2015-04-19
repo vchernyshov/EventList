@@ -54,7 +54,7 @@ public class FragmentAdapter extends FixedFragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		return (Integer.MAX_VALUE);
+		return dates.length;
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class FragmentAdapter extends FixedFragmentStatePagerAdapter {
 	public int getPositionByDate(String date) {
 		for (int i = 0; i < dates.length; i++) {
 			if (date.equals(dates[i])) {
-				Log.d(TAG, "new position = " + i);
+				Log.d(TAG, "new position = " + i + " paramDate = " + date + " arrDate = " +dates[i]);
 				return i;
 			}
 		}
