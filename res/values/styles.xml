@@ -10,8 +10,13 @@ by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
 
     <style name="BlackTextColor">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#000000</item>
+    </style>
+    
+    <style name="BlackTextColor.Center">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
     </style>
 
 </resources>
