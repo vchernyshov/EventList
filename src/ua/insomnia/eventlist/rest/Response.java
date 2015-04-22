@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class Response {
 
-	private static final String TAG = "Respone";
+	private static final String TAG = "Response";
 
 	private String responeString;
 	private Integer count;
@@ -60,19 +60,21 @@ public class Response {
 	}
 
 	public Integer getNextPage() {
-		if (nextPage != null) {
+		if (nextPage !=  null) {
 			Uri uri = Uri.parse(nextPage);
-			return Integer.valueOf(uri.getQueryParameter("next"));
+			String page = uri.getQueryParameter("page");
+			Log.d(TAG, "nextPage = " + page);
+			return Integer.valueOf(page);
 		} else
-			return null;
+			return Integer.valueOf(1);
 	}
 
 	public Integer getPreviousPage() {
 		if (previousPage != null) {
 			Uri uri = Uri.parse(previousPage);
-			return Integer.valueOf(uri.getQueryParameter("previous"));
+			return Integer.valueOf(uri.getQueryParameter("page"));
 		} else
-			return null;
+			return Integer.valueOf(1);
 	}
 
 	public ArrayList<Event> getEvents() {

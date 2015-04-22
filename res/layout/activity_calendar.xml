@@ -5,36 +5,40 @@
     android:orientation="vertical"
     android:background="#fff" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp" >
 
-        <Button
-            android:id="@+id/btnPrevMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
-
         <TextView
             android:id="@+id/txtMonthTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
-            android:layout_weight="1"
+            android:text="TextView"
             android:textColor="@color/month_title"
-            android:textSize="18sp"
-            android:text="TextView" />
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnPrevMonth"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="90dp"
+            android:background="@drawable/prev_button" />
 
         <Button
             android:id="@+id/btnNextMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="90dp"
+            android:background="@drawable/next_button" />
 
-    </LinearLayout>
+    </RelativeLayout>
     
     <android.support.v4.view.ViewPager
             android:id="@+id/calendarViewPager"

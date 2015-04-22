@@ -103,7 +103,7 @@ public class ListFragment extends Fragment implements Receiver,
 				Intent service = new Intent(getActivity(), EventService.class);
 				service.putExtra(EventService.EXTRA_RECEIVER, mReceiver);
 				service.putExtra(EventService.EXTRA_DATE, date);
-				//service.putExtra(EventService.EXTRA_PAGE, nextPage);
+				service.putExtra(EventService.EXTRA_PAGE, nextPage);
 				getActivity().startService(service);
 			}
 		});
@@ -145,8 +145,10 @@ public class ListFragment extends Fragment implements Receiver,
 			layout.setRefreshing(false);
 			listView.onLoadMoreComplete();
 
-			if (data.containsKey(EventService.EXTRA_PAGE))
+			if (data.containsKey(EventService.EXTRA_PAGE)) {
 				nextPage = data.getInt(EventService.EXTRA_PAGE, 1);
+				Log.d(TAG, "onReceiveResult. nextPage = " + nextPage);
+			}
 		}
 		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
 			layout.setRefreshing(false);

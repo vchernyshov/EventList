@@ -16,7 +16,7 @@ import android.util.Log;
 
 public class EventService extends IntentService {
 	public static final String TAG = "EventService";
-	
+
 	public static final String SERVICE_CALLBACK = "ua.insomnia.kpievent.SERVICE_CALLBACK";
 	public static final int SERVICE_START = 100;
 	public static final int SERVICE_STOP = 200;
@@ -31,7 +31,7 @@ public class EventService extends IntentService {
 	public static final String EXTRA_RECEIVER = "ua.insomnia.eventlist.rest.RECEIVER";
 	public static final String EXTRA_ACTION = "ua.insomnia.eventlist.rest.ACTION";
 	public static final String EXTRA_SERVICE_STATUS = "ua.insomnia.eventlist.rest.SERVICE_STATUS";
-	
+
 	public static final int ACTION_UPDATE = 0;
 	public static final int ACTION_LOAD = 0;
 	public static final int ACTION_LOAD_MORE = 0;
@@ -60,9 +60,12 @@ public class EventService extends IntentService {
 			ArrayList<Event> list = respone.getEvents();
 			putEventsToDataBase2(list);
 
-			// Bundle data = new Bundle();
-			// data.putInt(EXTRA_PAGE, respone.getNextPage());
-			receiver.send(SERVICE_LOAD_FINISHED, Bundle.EMPTY);
+			
+			int nextPage = respone.getNextPage();
+			Log.d(TAG, "onHandleIntent. nextPage = " + nextPage);
+			Bundle data = new Bundle();
+			data.putInt(EXTRA_PAGE, nextPage);
+			receiver.send(SERVICE_LOAD_FINISHED, data);
 			Log.d(TAG, "load finished hashCode = " + this.hashCode());
 
 		} else {
