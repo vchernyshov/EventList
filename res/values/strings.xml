@@ -1,14 +1,14 @@
 <resources>
 
-    <string name="app_name">Event List</string>
-    <string name="image">img</string>
+    <string name="app_name" translatable="false">Event List</string>
+    <string name="image" translatable="false">img</string>
     
-    <string name="no_events_for_today">На сьогодні немає запланованих подій</string>
-    <string name="bad_internet_connection">Перевірте з\'єднання з мережею!</string>
-    <string name="swipe_toast">Для перегляду інших днів зробіть свайп вправо або вліво</string>
-    <string name="free_event">Безкоштовно</string>
+    <string name="no_events_for_today" translatable="false">На сьогодні немає запланованих подій</string>
+    <string name="bad_internet_connection" translatable="false">Перевірте з\'єднання з мережею!</string>
+    <string name="swipe_toast" translatable="false">Для перегляду інших днів зробіть свайп вправо або вліво</string>
+    <string name="free_event" translatable="false">Безкоштовно</string>
     
-    <string name="future_events">Майбутні події</string>
-    <string name="past_events">Минулі події</string>
+    <string name="future_events" translatable="false">Майбутні події</string>
+    <string name="past_events" translatable="false">Минулі події</string>
 
 </resources>

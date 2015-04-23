@@ -1,21 +1,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp" >
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_launcher" />
+        android:layout_gravity="center" />
 
     <ua.insomnia.textviewfonts.TextViewFonts
         android:id="@+id/textViewFonts1"
         style="@style/BlackTextColor"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="8dp"
-        android:text="TextViewFonts"
         app:custom_font="MyriadPro-Regular.ttf" />
 
 </LinearLayout>

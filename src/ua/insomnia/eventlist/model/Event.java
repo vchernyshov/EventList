@@ -1,5 +1,9 @@
 package ua.insomnia.eventlist.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,12 +91,10 @@ public class Event {
 		Time t = new Time(Time.getCurrentTimezone());
 		t.format("yyyy-MM-dd");
 		t.parse3339(dateTime);
-
-		int year = t.year;
-		int month = t.month + 1;
-		int day = t.monthDay;
-
-		return year + "-" + month + "-" + day;
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+		Date date = new Date(t.toMillis(true));
+		return format.format(date);
 	}
 
 	public String getDate2() {
@@ -125,7 +127,7 @@ public class Event {
 		int hour = t.hour;
 		int minutes = t.minute;
 		String res = null;
-		hour = hour + 2;
+		hour = hour + 3;
 		res = hour + ":" + minutes;
 
 		if (minutes < 10)

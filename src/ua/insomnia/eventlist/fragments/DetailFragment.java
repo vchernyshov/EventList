@@ -7,8 +7,10 @@ import ua.insomnia.eventlist.rest.EventService;
 import ua.insomnia.eventlist.rest.ServiceResultsReceiver;
 import ua.insomnia.eventlist.rest.ServiceResultsReceiver.Receiver;
 import ua.insomnia.textviewfonts.TextViewFonts;
+import android.app.Notification.Action;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -129,11 +132,13 @@ public class DetailFragment extends Fragment implements Receiver,
 
 		String[] info = { localEvent.title, "", localEvent.description,
 				localEvent.getDate(), localEvent.getTime(),
-				localEvent.location, newPrice, localEvent.site };
+				localEvent.location, newPrice, localEvent.site,
+				localEvent.vkLink, localEvent.fbLink };
 		int[] localIcons = { R.drawable.ic_launcher, R.drawable.tag_ic,
 				R.drawable.ic_launcher, R.drawable.calendar_ic,
 				R.drawable.clock_ic, R.drawable.location_ic,
-				R.drawable.money_ic, R.drawable.phone_ic };
+				R.drawable.money_ic, R.drawable.web_site, R.drawable.web_site,
+				R.drawable.web_site };
 		Picasso.with(getActivity()).load(localEvent.image)
 				.into((ImageView) view.findViewById(R.id.imLogo));
 
@@ -146,6 +151,20 @@ public class DetailFragment extends Fragment implements Receiver,
 				LinearLayout child = (LinearLayout) infoBlock.getChildAt(i);
 
 				Log.d("Event", info[i]);
+
+				if (i >= (infoBlock.getChildCount() - 3)) {
+					final String link = info[i];
+					child.setClickable(true);
+					child.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent viewIntent = new Intent(Intent.ACTION_VIEW,
+									Uri.parse(link));
+							startActivity(viewIntent);
+						}
+					});
+				}
 				if (TextUtils.isEmpty(info[i]))
 					child.setVisibility(View.GONE);
 
@@ -209,7 +228,8 @@ public class DetailFragment extends Fragment implements Receiver,
 
 		if (resultCode == EventService.SERVICE_LOAD_ERROR) {
 			layout.setRefreshing(false);
-			Toast.makeText(getActivity(), getString(R.string.bad_internet_connection),
+			Toast.makeText(getActivity(),
+					getString(R.string.bad_internet_connection),
 					Toast.LENGTH_SHORT).show();
 		}
 	}

@@ -9,14 +9,12 @@
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:background="#fff" >
 
         <LinearLayout
             android:id="@+id/info_top"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <ImageView
@@ -29,8 +27,7 @@
                 android:id="@+id/info_child"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:paddingBottom="16dp"
                 android:orientation="vertical"
                 android:visibility="visible" >
 
@@ -39,58 +36,33 @@
                     style="@style/BlackTextColor"
                     android:layout_marginBottom="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="TextViewFonts"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:textSize="24sp"
                     app:custom_font="Cuprum-Regular.ttf" />
 
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    layout="@layout/info_block_item" />
+                <include layout="@layout/info_block_item" />
 
                 <ua.insomnia.textviewfonts.TextViewFonts
-                    android:id="@+id/textViewFonts2"
                     style="@style/BlackTextColor"
                     android:layout_marginBottom="16dp"
-                    app:custom_font = "MyriadPro-Regular.ttf"
-                    android:text="TextViewFonts" />
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    app:custom_font="MyriadPro-Regular.ttf" />
 
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    layout="@layout/info_block_item" />
+                <include layout="@layout/info_block_item" />
 
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    layout="@layout/info_block_item" />
+                <include layout="@layout/info_block_item" />
 
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    layout="@layout/info_block_item" />
+                <include layout="@layout/info_block_item" />
 
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    layout="@layout/info_block_item" />
+                <include layout="@layout/info_block_item" />
 
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    layout="@layout/info_block_item" />
+                <include layout="@layout/info_block_item" />
+
+                <include layout="@layout/info_block_item" />
+
+                <include layout="@layout/info_block_item" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
